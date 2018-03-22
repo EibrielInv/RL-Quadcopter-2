@@ -27,17 +27,22 @@ class Task():
         # Goal
         self.target_pos = target_pos if target_pos is not None else np.array([0., 0., 10.])
 
+        self.rotor_speeds = [0.01, 0.01, 0.01, 0.01]
+
     def get_reward(self):
         """Uses current pose of sim to return reward."""
         reward = 1. - .3 * (abs(self.sim.pose[:3] - self.target_pos)).sum()
+        reward = self.sim.pose[3]
         return reward
 
     def step(self, rotor_speeds):
         """Uses action to obtain next state, reward, done."""
+        self.rotor_speeds = [x + y for x, y in zip(self.rotor_speeds, rotor_speeds)]
+        # print(self.rotor_speeds)
         reward = 0
         pose_all = []
         for _ in range(self.action_repeat):
-            done = self.sim.next_timestep(rotor_speeds)  # update the sim pose and velocities
+            done = self.sim.next_timestep(self.rotor_speeds)  # update the sim pose and velocities
             reward += self.get_reward()
             pose_all.append(self.sim.pose)
         next_state = np.concatenate(pose_all)
@@ -47,4 +52,6 @@ class Task():
         """Reset the sim to start a new episode."""
         self.sim.reset()
         state = np.concatenate([self.sim.pose] * self.action_repeat)
+        self.rotor_speeds = [0.01, 0.01, 0.01, 0.01]
+        # print("RESET")
         return state

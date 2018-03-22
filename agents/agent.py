@@ -69,10 +69,10 @@ class QNetwork:
                     # This form of error clipping further improved the stability of the algorithm.
 
                     # self.loss = tf.reduce_mean(self.huber_loss(self.targetQs_, self.Q))
-                    self.loss = tf.reduce_mean(self.targetQs_ - self.Q)
+                    self.loss = tf.reduce_mean(tf.square(self.targetQs_ - self.Q))
                     tf.summary.scalar('loss', self.loss)
-                    # self.opt = tf.train.AdamOptimizer(learning_rate).minimize(self.loss)
-                    self.opt = tf.train.RMSPropOptimizer(learning_rate, momentum=0.95).minimize(self.loss)
+                    self.opt = tf.train.AdamOptimizer(learning_rate).minimize(self.loss)
+                    # self.opt = tf.train.RMSPropOptimizer(learning_rate, momentum=0.95).minimize(self.loss)
 
             self.merged = tf.summary.merge_all()
 
@@ -128,18 +128,30 @@ class Memory():
 
 class DQL_Agent():
     def __init__(self, task):
-        hidden_size = 64
-        learning_rate = 0.001
+        self.loss = 0.0
+
+        hidden_size = 32
+        learning_rate = 0.1
         state_size = 18
-        self.action_size = 4
-        memory_size = 1000
+        self.action_size = 16
+        memory_size = 500
         pretrain_length = 500
         self.batch_size = 32
-        self.gamma = 0.99                   # future reward discount
+        self.gamma = 0.9                    # future reward discount
+        self.update_frequency = 2
         tf.reset_default_graph()
         self.mainQN = QNetwork(name='main', hidden_size=hidden_size, learning_rate=learning_rate, state_size=state_size, action_size=self.action_size, optimize=False)
         self.copyQN = QNetwork(name='copy', hidden_size=hidden_size, learning_rate=learning_rate, state_size=state_size, action_size=self.action_size)
         self.task = task
+
+        # Discrete action space
+        values = [-100, 100]
+        self.discrete_to_continuous_ = []
+        for v_1 in values:
+            for v_2 in values:
+                for v_3 in values:
+                    for v_4 in values:
+                        self.discrete_to_continuous_.append([v_1, v_2, v_3, v_4])
 
         # Copy Op
         def get_var(varname):
@@ -158,13 +170,13 @@ class DQL_Agent():
                 if get_var(vvar.name) is not None:
                     vars2save[vvar.name] = get_var(vvar.name)
 
-        copying_cm = []
+        self.copying_cm = []
         with tf.variable_scope('copy_parameters_cm'):
             for vvar in vars2copy:
                 fromvar = get_var('copy/{}'.format(vvar))
                 tovar = get_var('main/{}'.format(vvar))
                 if fromvar is not None and tovar is not None:
-                        copying_cm.append(tovar.assign(fromvar))
+                        self.copying_cm.append(tovar.assign(fromvar))
 
         copying_mc = []
         with tf.variable_scope('copy_parameters_mc'):
@@ -186,13 +198,12 @@ class DQL_Agent():
         print("Initial experiences")
         for ii in range(pretrain_length):
             action = self.discrete_to_continuous(self.random_discrete_action())
-            print(action)
             next_state, reward, done = self.task.step(action)
             if done:
                 # The simulation fails so no next state
                 next_state = np.zeros(state.shape)
                 # Add experience to memory
-                self.memory.add((state, action, reward, next_state))
+                self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
 
                 # Start new episode
                 self.task.reset()
@@ -201,52 +212,57 @@ class DQL_Agent():
                 state, reward, done = self.task.step(random_action)
             else:
                 # Add experience to memory
-                self.memory.add((state, action, reward, next_state))
+                # print((state, action, reward, next_state))
+                self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
                 state = next_state
 
-        with tf.Session() as sess:
-            # Initialize variables
-            sess.run(tf.global_variables_initializer())
-            sess.run(tf.local_variables_initializer())
-            sess.run(copying_cm)  # Perform copy parameters from copy to main
+        self.sess = tf.Session()
+        # with self.sess as sess:
+        # Initialize variables
+        # print(sess)
+        self.sess.run(tf.global_variables_initializer())
+        self.sess.run(tf.local_variables_initializer())
+        self.sess.run(self.copying_cm)  # Perform copy parameters from copy to main
 
-            # file_writer = tf.summary.FileWriter('./logs/1', sess.graph)
+        # file_writer = tf.summary.FileWriter('./logs/1', sess.graph)
 
     def random_discrete_action(self):
         return random.randint(0, 12)  # np.array([0.2, 0.1, 0.5, 0.1])
 
     def discrete_to_continuous(self, discrete):
-        values = [-300, 0.5, 300]
-        combinations = []
-        for v_1 in values:
-            for v_2 in values:
-                for v_3 in values:
-                    for v_4 in values:
-                        combinations.append([v_1, v_2, v_3, v_4])
-        return np.array(combinations[discrete])
+        ret = self.discrete_to_continuous_[discrete]
+        # print(ret)
+        return ret
+
+    def continuous_to_discrete(self, continuous):
+        ret = None
+        if continuous in self.discrete_to_continuous_:
+            ret = self.discrete_to_continuous_.index(continuous)
+        # print(ret)
+        return ret
 
     def act(self, state):
         # Choose action based on given state and policy
         # action = np.dot(state, self.w)  # simple linear policy
         # action = np.array([.1, .1, .1, .1])
-        if 0.5 > np.random.rand():
+        if 0.05 > np.random.rand():
             action = self.random_discrete_action()  # TODO take a random action
         else:
             # Get action from Q copy
-            with tf.Session() as sess:
-                sess.run(tf.global_variables_initializer())
-                sess.run(tf.local_variables_initializer())
-                feed = {
-                    self.copyQN.inputs_: state.reshape((1, *state.shape)),
-                    self.copyQN.batch_size: 1,
-                    self.copyQN.keep_prob: 1.0,
-                    # Dummy values, not used, only to satisfy the Graph
-                    self.mainQN.inputs_: state.reshape((1, *state.shape)),
-                    self.mainQN.batch_size: 1,
-                    self.mainQN.keep_prob: 1.0
-                }
-                Qs = sess.run(self.copyQN.output, feed_dict=feed)
-                action = np.argmax(Qs)
+            # with self.sess as sess:
+            self.sess.run(tf.global_variables_initializer())
+            self.sess.run(tf.local_variables_initializer())
+            feed = {
+                self.copyQN.inputs_: state.reshape((1, *state.shape)),
+                self.copyQN.batch_size: 1,
+                self.copyQN.keep_prob: 1.0,
+                # Dummy values, not used, only to satisfy the Graph
+                self.mainQN.inputs_: state.reshape((1, *state.shape)),
+                self.mainQN.batch_size: 1,
+                self.mainQN.keep_prob: 1.0
+            }
+            Qs = self.sess.run(self.copyQN.output, feed_dict=feed)
+            action = np.argmax(Qs)
         return self.discrete_to_continuous(action)
 
     def step(self, state, action, reward, next_state, done):
@@ -258,75 +274,81 @@ class DQL_Agent():
             # the episode ends so no next state
             next_state = np.zeros(state.shape)
 
-            t = max_steps
-            rewards_list.append((ep, total_reward))
+            # t = max_steps
+            # rewards_list.append((ep, total_reward))
 
             # Add experience to memory
-            self.memory.add((state, action, reward, next_state))
+            self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
 
             # Start new episode
-            env.reset()
+            self.task.reset()
             # Take one random step, get new state and reward
-            state, reward, done, _ = env.step(env.action_space.sample())
-
+            action = self.discrete_to_continuous(self.random_discrete_action())
+            # state, reward, done = self.task.step(action)
+            # self.score = reward
+            # self.best_score = reward
         else:
             # Add experience to memory
-            self.memory.add((state, action, reward, next_state))
-            state = next_state
+            self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
+            # state = next_state
             # t += 1
         # Learn, if at end of episode
         # if done:
         #     self.learn()
-        with tf.Session() as sess:
-            sess.run(tf.global_variables_initializer())
-            sess.run(tf.local_variables_initializer())
-            # Sample mini-batch from memory
-            batch = self.memory.sample(self.batch_size)
-            states = np.array([each[0] for each in batch])
-            actions = np.array([each[1] for each in batch])
-            rewards = np.array([each[2] for each in batch])
-            next_states = np.array([each[3] for each in batch])
+        # with tf.Session() as sess:
+        # self.sess.run(tf.global_variables_initializer())
+        # self.sess.run(tf.local_variables_initializer())
+        # Sample mini-batch from memory
+        batch = self.memory.sample(self.batch_size)
+        states = np.array([each[0] for each in batch])
+        actions = np.array([each[1] for each in batch])
+        rewards = np.array([each[2] for each in batch])
+        next_states = np.array([each[3] for each in batch])
 
-            # Get main Q^ #
-            # Executes batch_size actions, and caches the output
-            # of the Neural Network. output = Q
-            feed_dict = {
-                self.mainQN.inputs_: next_states,
-                self.mainQN.batch_size: self.batch_size,
-                self.mainQN.keep_prob: 1.0
-            }
-            target_Qs = sess.run(self.mainQN.output, feed_dict=feed_dict)
+        # Get main Q^ #
+        # Executes batch_size actions, and caches the output
+        # of the Neural Network. output = Q
+        feed_dict = {
+            self.mainQN.inputs_: next_states,
+            self.mainQN.batch_size: self.batch_size,
+            self.mainQN.keep_prob: 1.0
+        }
+        target_Qs = self.sess.run(self.mainQN.output, feed_dict=feed_dict)
 
-            # data = sess.run(self.mainQN.inputs2d, feed_dict=feed_dict)
+        # data = sess.run(self.mainQN.inputs2d, feed_dict=feed_dict)
 
-            # Set target_Qs to 0 for states where episode ends
-            # Ending episode + 1 should have zero Q (all the reward
-            # is "stored" on the current reward)
-            episode_ends = (next_states == np.zeros(states[0].shape)).all(axis=1)
-            target_Qs[episode_ends] = [0 for _ in range(0, self.action_size)]
+        # Set target_Qs to 0 for states where episode ends
+        # Ending episode + 1 should have zero Q (all the reward
+        # is "stored" on the current reward)
+        episode_ends = (next_states == np.zeros(states[0].shape)).all(axis=1)
+        target_Qs[episode_ends] = [0 for _ in range(0, self.action_size)]
 
-            # Updates the already generated Q according to the reward
-            # like if the generated Q where real (?)
-            targets = rewards + self.gamma * np.max(target_Qs, axis=1)
+        # Updates the already generated Q according to the reward
+        # like if the generated Q where real (?)
+        targets = rewards + self.gamma * np.max(target_Qs, axis=1)
 
-            # Train copy Network #
-            # Force the network to output the new Q
-            # given the same state and action as before
-            feed_dict = {
-                self.copyQN.inputs_: states,
-                self.copyQN.targetQs_: targets,
-                self.copyQN.actions_: actions,
-                self.copyQN.batch_size: self.batch_size,
-                self.copyQN.keep_prob: 7.0,
-                # Dummy values, not used, only to satisfy the Graph
-                self.mainQN.inputs_: states,
-                self.mainQN.actions_: actions,
-                self.mainQN.targetQs_: targets,
-                self.mainQN.batch_size: self.batch_size,
-                self.mainQN.keep_prob: 7.0,
-            }
-            summary, loss, _ = sess.run([self.copyQN.merged, self.copyQN.loss, self.copyQN.opt],
-                                        feed_dict=feed_dict)
+        # Train copy Network #
+        # Force the network to output the new Q
+        # given the same state and action as before
+        feed_dict = {
+            self.copyQN.inputs_: states,
+            self.copyQN.targetQs_: targets,
+            self.copyQN.actions_: actions,
+            self.copyQN.batch_size: self.batch_size,
+            self.copyQN.keep_prob: 70.0,
+            # Dummy values, not used, only to satisfy the Graph
+            self.mainQN.inputs_: states,
+            self.mainQN.actions_: actions,
+            self.mainQN.targetQs_: targets,
+            self.mainQN.batch_size: self.batch_size,
+            self.mainQN.keep_prob: 70.0,
+        }
+        summary, loss, _ = self.sess.run([self.copyQN.merged, self.copyQN.loss, self.copyQN.opt],
+                                         feed_dict=feed_dict)
+        if self.count % self.update_frequency == 0:
+            # print("UPDATE")
+            self.sess.run(self.copying_cm)  # Perform copy parameters from copy to main
+        self.loss = loss
 
     def learn(self):
         self.score = .0
@@ -338,3 +360,6 @@ class DQL_Agent():
         self.count = 0
         state = self.task.reset()
         return state
+
+    def close(self):
+        self.sess.close()
