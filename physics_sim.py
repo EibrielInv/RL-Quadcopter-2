@@ -37,6 +37,7 @@ class PhysicsSim():
         self.C_d = 0.3
         self.l_to_rotor = 0.4
         self.propeller_size = 0.1
+        self.T_q = 0.1
         width, length, height = .51, .51, .235
         self.dims = np.array([width, length, height])  # x, y, z dimensions of quadcopter
         self.areas = np.array([length * height, width * height, width * length])
@@ -82,13 +83,51 @@ class PhysicsSim():
         linear_forces += gravity_force
         return linear_forces
 
-    def get_moments(self, thrusts):
+    def get_moments_(self, thrusts):
         thrust_moment = np.array([(thrusts[3] - thrusts[2]) * self.l_to_rotor,
                             (thrusts[1] - thrusts[0]) * self.l_to_rotor,
                             0])# (thrusts[2] + thrusts[3] - thrusts[0] - thrusts[1]) * self.T_q])  # Moment from thrust
 
         drag_moment =  self.C_d * 0.5 * self.rho * self.angular_v * np.absolute(self.angular_v) * self.areas * self.dims * self.dims
         moments = thrust_moment - drag_moment # + motor_inertia_moment
+        return moments
+
+    def get_moments(self, thrusts):
+        """
+        :param thrusts: Thrust from each rotor
+        :return: x, y, z moments
+
+        Drone rotor layout
+        Distance from each rotor to the CG is the same
+
+            X
+            ^
+            |
+        Y<--Z
+
+        R0(CW)             -             R1(CCW)
+                           ^
+                           |
+          |<--l_to_rotor-->CG<--l_to_rotor-->|
+                           |
+                           |
+        R3(CCW)            -               R2(CW)
+
+
+        """
+
+        # OG moments
+        # thrust_moment = np.array([(thrusts[3] - thrusts[2]) * self.l_to_rotor,
+        #                           (thrusts[1] - thrusts[0]) * self.l_to_rotor,
+        #                           0.0])
+        #                           (thrusts[2] + thrusts[3] - thrusts[0] - thrusts[1]) * self.T_q])
+
+        thrust_moment = np.array([(thrusts[0] + thrusts[3] - thrusts[1] - thrusts[2]) * self.l_to_rotor,
+                                  (thrusts[2] + thrusts[3] - thrusts[0] - thrusts[1]) * self.l_to_rotor,
+                                  (thrusts[0] + thrusts[2] - thrusts[1] - thrusts[3]) * self.T_q])
+
+        drag_moment = self.C_d * 0.5 * self.rho * self.angular_v * np.absolute(self.angular_v) * self.areas * self.dims * self.dims
+        moments = thrust_moment - drag_moment  # + motor_inertia_moment
         return moments
 
     def calc_prop_wind_speed(self):

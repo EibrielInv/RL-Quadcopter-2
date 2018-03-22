@@ -1,365 +1,137 @@
-import random
-import numpy as np
+import json
+import time
 import tensorflow as tf
 
-from collections import deque
+import agents.training as training
+from agents.models import Actor
+from agents.models import Critic
+from agents.memory import Memory
+from agents.noise import *
+
+from agents.common import logger
+
 from task import Task
 
-
-class QNetwork:
-    def __init__(self, learning_rate=0.01, state_size=4,
-                 action_size=2, hidden_size=10,
-                 name='QNetwork', optimize=True):
-        alpha = 0.1
-        # state inputs to the Q-network
-        with tf.variable_scope(name):
-            self.inputs_ = tf.placeholder(tf.float32, [None, state_size], name='inputs')
-
-            # One hot encode the actions to later choose the Q-value for the action
-            with tf.variable_scope('actions'):
-                self.actions_ = tf.placeholder(tf.int32, [None], name='actions')
-                one_hot_actions = tf.one_hot(self.actions_, action_size)
-
-            # Target Q values for training
-            self.targetQs_ = tf.placeholder(tf.float32, [None], name='target')
-            self.keep_prob = tf.placeholder(tf.float32, [], name='keep_prob')
-            self.batch_size = tf.placeholder(tf.int32, [], name='batch_size')
-
-            with tf.variable_scope('relu_hidden_layers'):
-                # ReLU hidden layers
-                self.fc1 = tf.layers.dense(self.inputs_,
-                                           hidden_size,
-                                           activation=None,
-                                           kernel_initializer=tf.contrib.layers.xavier_initializer())
-                self.fc1 = tf.maximum(alpha * self.fc1, self.fc1)
-
-                self.fc2 = tf.layers.dense(self.fc1, hidden_size,
-                                           activation=None,
-                                           kernel_initializer=tf.contrib.layers.xavier_initializer())
-                self.fc2 = tf.maximum(alpha * self.fc2, self.fc2)
-
-                out_layer = self.fc2
-
-            with tf.variable_scope('linear_output_layer'):
-                # Linear output layer
-                self.output = tf.layers.dense(out_layer, action_size,
-                                              activation=None,
-                                              kernel_initializer=tf.contrib.layers.xavier_initializer())
-
-            tf.summary.histogram('output', self.output)
-            # Train with loss (targetQ - Q)^2
-            # output has length of possible actions. This next line chooses
-            # one value from output (per row) according to the one-hot encoded action.
-            # Example: [1.2, 3.4, 9.3] x [1, 0, 0] = [1.2, 0, 0] = 1.2
-            with tf.variable_scope('selected_Q'):
-                self.Q = tf.reduce_sum(tf.multiply(self.output, one_hot_actions), axis=1)
-
-            tf.summary.histogram('Q', self.Q)
-            tf.summary.histogram('target_Q', self.targetQs_)
-
-            if optimize:
-                with tf.variable_scope('optimize_loss'):
-                    # According to doi:10.1038/nature14236 clipping
-                    # Because the absolute value loss function x
-                    # has a derivative of -1 for all negative values of x
-                    # and a derivative of 1 for all positive values of x
-                    # , clipping the squared error to be between -1 and 1 cor-
-                    # responds to using an absolute value loss function for
-                    # errors outside of the (-1,1) interval.
-                    # This form of error clipping further improved the stability of the algorithm.
-
-                    # self.loss = tf.reduce_mean(self.huber_loss(self.targetQs_, self.Q))
-                    self.loss = tf.reduce_mean(tf.square(self.targetQs_ - self.Q))
-                    tf.summary.scalar('loss', self.loss)
-                    self.opt = tf.train.AdamOptimizer(learning_rate).minimize(self.loss)
-                    # self.opt = tf.train.RMSPropOptimizer(learning_rate, momentum=0.95).minimize(self.loss)
-
-            self.merged = tf.summary.merge_all()
-
-    def clipped_error(self, x):
-        # Huber Loss
-        # return tf.select(tf.abs(x) < 1.0, 0.5 * tf.square(x), tf.abs(x) - 0.5)  # condition, true, false
-        tf.contrib
-        tf.contrib.graph_editor
-        tf.contrib.graph_editor.select()
-        return tf.contrib.graph_editor.select(tf.abs(x) < 1.0, 0.5 * tf.square(x), tf.abs(x) - 0.5)  # condition, true, false
-
-    def huber_loss(y_true, y_pred, max_grad=1.):
-        """Calculates the huber loss. - https://stackoverflow.com/a/42985363
-
-        Parameters
-        ----------
-        y_true: np.array, tf.Tensor
-          Target value.
-        y_pred: np.array, tf.Tensor
-          Predicted value.
-        max_grad: float, optional
-          Positive floating point value. Represents the maximum possible
-          gradient magnitude.
-
-        Returns
-        -------
-        tf.Tensor
-          The huber loss.
-        """
-        err = tf.abs(y_true - y_pred, name='abs')
-        mg = tf.constant(max_grad, name='max_grad')
-
-        lin = mg * (err - .5 * mg)
-        quad = .5 * err * err
-
-        return tf.where(err < mg, quad, lin)
+from mpi4py import MPI
 
 
-# create memory class for storing previous experiences
-class Memory():
-    def __init__(self, max_size=1000):
-        self.buffer = deque(maxlen=max_size)
-
-    def add(self, experience):
-        self.buffer.append(experience)
-
-    def sample(self, batch_size):
-        idx = np.random.choice(np.arange(len(self.buffer)),
-                               size=batch_size,
-                               replace=False)
-        return [self.buffer[ii] for ii in idx]
+class action_space:
+    def __init__(self):
+        self.shape = (3,)
+        self.range = 600
+        # self.low = np.array([-self.range, -self.range, -self.range, -self.range])
+        # self.high = np.array([self.range, self.range, self.range, self.range])
+        self.low = np.array([-self.range, -1., -1.])
+        self.high = np.array([self.range, 1., 1.])
 
 
-class DQL_Agent():
-    def __init__(self, task):
-        self.loss = 0.0
+class observation_space:
+    def __init__(self):
+        self.shape = (19,)
 
-        hidden_size = 32
-        learning_rate = 0.1
-        state_size = 18
-        self.action_size = 16
-        memory_size = 500
-        pretrain_length = 500
-        self.batch_size = 32
-        self.gamma = 0.9                    # future reward discount
-        self.update_frequency = 2
-        tf.reset_default_graph()
-        self.mainQN = QNetwork(name='main', hidden_size=hidden_size, learning_rate=learning_rate, state_size=state_size, action_size=self.action_size, optimize=False)
-        self.copyQN = QNetwork(name='copy', hidden_size=hidden_size, learning_rate=learning_rate, state_size=state_size, action_size=self.action_size)
-        self.task = task
 
-        # Discrete action space
-        values = [-100, 100]
-        self.discrete_to_continuous_ = []
-        for v_1 in values:
-            for v_2 in values:
-                for v_3 in values:
-                    for v_4 in values:
-                        self.discrete_to_continuous_.append([v_1, v_2, v_3, v_4])
+class dummy_environment:
+    def __init__(self, eval_=False):
+        self.action_space = action_space()
+        self.observation_space = observation_space()
+        self.task = Task(runtime=20.)
+        self.global_time = 0
+        self.labels = ['time', 'x', 'y', 'z', 'phi', 'theta', 'psi', 'x_velocity',
+                       'y_velocity', 'z_velocity', 'phi_velocity', 'theta_velocity',
+                       'psi_velocity', 'rotor_speed1', 'rotor_speed2', 'rotor_speed3', 'reward']
+        self.results = {x: [] for x in self.labels}
+        self.to_write = None
+        self.eval = eval_
 
-        # Copy Op
-        def get_var(varname):
-            ret = [v for v in tf.global_variables() if v.name == varname]
-            if len(ret) == 0:
-                print("\"{}\" not found".format(varname))
-                return None
-            return ret[0]
-        vars2copy = []
-        vars2save = {}
-        for vvar in tf.global_variables():
-            if vvar.name.startswith('main/'):
-                # Copy the following vars
-                vars2copy.append(vvar.name[5:])
-                # Save the following vars
-                if get_var(vvar.name) is not None:
-                    vars2save[vvar.name] = get_var(vvar.name)
+    def seed(self, seed):
+        self.seed = seed
 
-        self.copying_cm = []
-        with tf.variable_scope('copy_parameters_cm'):
-            for vvar in vars2copy:
-                fromvar = get_var('copy/{}'.format(vvar))
-                tovar = get_var('main/{}'.format(vvar))
-                if fromvar is not None and tovar is not None:
-                        self.copying_cm.append(tovar.assign(fromvar))
+    def step(self, action):
+        # action += self.action_space.range
+        action += np.array([self.action_space.range, 0., 0.])
+        new_obs, r, done = self.task.step(action)
+        self.to_write = [self.global_time] + list(self.task.sim.pose) + list(self.task.sim.v) + list(self.task.sim.angular_v) + list(action) + [float(r)]
+        for ii in range(len(self.labels)):
+            self.results[self.labels[ii]].append(self.to_write[ii])
+        self.global_time += 1
+        if self.eval:
+            file_output = 'data.json'
+            if self.global_time % 1000 == 0:
+                with open(file_output, 'w') as data_file:
+                    json.dump(self.results,
+                              data_file,
+                              sort_keys=True,
+                              indent=4,
+                              separators=(',', ': '))
+        return new_obs, r, done, {}
 
-        copying_mc = []
-        with tf.variable_scope('copy_parameters_mc'):
-            for vvar in vars2copy:
-                fromvar = get_var('main/{}'.format(vvar))
-                tovar = get_var('copy/{}'.format(vvar))
-                if fromvar is not None and tovar is not None:
-                        copying_mc.append(tovar.assign(fromvar))
-
-        # Initialize the simulation
-        self.reset_episode()
-        # Take one random step to generate an initial state
-        # state, reward, done, _ = self.step([0.2, 0.1, 0.5, 0.1])
-
-        self.memory = Memory(max_size=memory_size)
-        action = self.discrete_to_continuous(self.random_discrete_action())
-        state, reward, done = self.task.step(action)
-        # Make a bunch of random actions and store the experiences
-        print("Initial experiences")
-        for ii in range(pretrain_length):
-            action = self.discrete_to_continuous(self.random_discrete_action())
-            next_state, reward, done = self.task.step(action)
-            if done:
-                # The simulation fails so no next state
-                next_state = np.zeros(state.shape)
-                # Add experience to memory
-                self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
-
-                # Start new episode
-                self.task.reset()
-                # Take one random step to generate an initial state
-                random_action = self.discrete_to_continuous(self.random_discrete_action())
-                state, reward, done = self.task.step(random_action)
-            else:
-                # Add experience to memory
-                # print((state, action, reward, next_state))
-                self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
-                state = next_state
-
-        self.sess = tf.Session()
-        # with self.sess as sess:
-        # Initialize variables
-        # print(sess)
-        self.sess.run(tf.global_variables_initializer())
-        self.sess.run(tf.local_variables_initializer())
-        self.sess.run(self.copying_cm)  # Perform copy parameters from copy to main
-
-        # file_writer = tf.summary.FileWriter('./logs/1', sess.graph)
-
-    def random_discrete_action(self):
-        return random.randint(0, 12)  # np.array([0.2, 0.1, 0.5, 0.1])
-
-    def discrete_to_continuous(self, discrete):
-        ret = self.discrete_to_continuous_[discrete]
-        # print(ret)
-        return ret
-
-    def continuous_to_discrete(self, continuous):
-        ret = None
-        if continuous in self.discrete_to_continuous_:
-            ret = self.discrete_to_continuous_.index(continuous)
-        # print(ret)
-        return ret
-
-    def act(self, state):
-        # Choose action based on given state and policy
-        # action = np.dot(state, self.w)  # simple linear policy
-        # action = np.array([.1, .1, .1, .1])
-        if 0.05 > np.random.rand():
-            action = self.random_discrete_action()  # TODO take a random action
-        else:
-            # Get action from Q copy
-            # with self.sess as sess:
-            self.sess.run(tf.global_variables_initializer())
-            self.sess.run(tf.local_variables_initializer())
-            feed = {
-                self.copyQN.inputs_: state.reshape((1, *state.shape)),
-                self.copyQN.batch_size: 1,
-                self.copyQN.keep_prob: 1.0,
-                # Dummy values, not used, only to satisfy the Graph
-                self.mainQN.inputs_: state.reshape((1, *state.shape)),
-                self.mainQN.batch_size: 1,
-                self.mainQN.keep_prob: 1.0
-            }
-            Qs = self.sess.run(self.copyQN.output, feed_dict=feed)
-            action = np.argmax(Qs)
-        return self.discrete_to_continuous(action)
-
-    def step(self, state, action, reward, next_state, done):
-        # Save experience / reward
-        self.total_reward += reward
-        self.count += 1
-
-        if done:
-            # the episode ends so no next state
-            next_state = np.zeros(state.shape)
-
-            # t = max_steps
-            # rewards_list.append((ep, total_reward))
-
-            # Add experience to memory
-            self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
-
-            # Start new episode
-            self.task.reset()
-            # Take one random step, get new state and reward
-            action = self.discrete_to_continuous(self.random_discrete_action())
-            # state, reward, done = self.task.step(action)
-            # self.score = reward
-            # self.best_score = reward
-        else:
-            # Add experience to memory
-            self.memory.add((state, self.continuous_to_discrete(action), reward, next_state))
-            # state = next_state
-            # t += 1
-        # Learn, if at end of episode
-        # if done:
-        #     self.learn()
-        # with tf.Session() as sess:
-        # self.sess.run(tf.global_variables_initializer())
-        # self.sess.run(tf.local_variables_initializer())
-        # Sample mini-batch from memory
-        batch = self.memory.sample(self.batch_size)
-        states = np.array([each[0] for each in batch])
-        actions = np.array([each[1] for each in batch])
-        rewards = np.array([each[2] for each in batch])
-        next_states = np.array([each[3] for each in batch])
-
-        # Get main Q^ #
-        # Executes batch_size actions, and caches the output
-        # of the Neural Network. output = Q
-        feed_dict = {
-            self.mainQN.inputs_: next_states,
-            self.mainQN.batch_size: self.batch_size,
-            self.mainQN.keep_prob: 1.0
-        }
-        target_Qs = self.sess.run(self.mainQN.output, feed_dict=feed_dict)
-
-        # data = sess.run(self.mainQN.inputs2d, feed_dict=feed_dict)
-
-        # Set target_Qs to 0 for states where episode ends
-        # Ending episode + 1 should have zero Q (all the reward
-        # is "stored" on the current reward)
-        episode_ends = (next_states == np.zeros(states[0].shape)).all(axis=1)
-        target_Qs[episode_ends] = [0 for _ in range(0, self.action_size)]
-
-        # Updates the already generated Q according to the reward
-        # like if the generated Q where real (?)
-        targets = rewards + self.gamma * np.max(target_Qs, axis=1)
-
-        # Train copy Network #
-        # Force the network to output the new Q
-        # given the same state and action as before
-        feed_dict = {
-            self.copyQN.inputs_: states,
-            self.copyQN.targetQs_: targets,
-            self.copyQN.actions_: actions,
-            self.copyQN.batch_size: self.batch_size,
-            self.copyQN.keep_prob: 70.0,
-            # Dummy values, not used, only to satisfy the Graph
-            self.mainQN.inputs_: states,
-            self.mainQN.actions_: actions,
-            self.mainQN.targetQs_: targets,
-            self.mainQN.batch_size: self.batch_size,
-            self.mainQN.keep_prob: 70.0,
-        }
-        summary, loss, _ = self.sess.run([self.copyQN.merged, self.copyQN.loss, self.copyQN.opt],
-                                         feed_dict=feed_dict)
-        if self.count % self.update_frequency == 0:
-            # print("UPDATE")
-            self.sess.run(self.copying_cm)  # Perform copy parameters from copy to main
-        self.loss = loss
-
-    def learn(self):
-        self.score = .0
-        self.best_score = .1
-        self.noise_scale = 0.2
-
-    def reset_episode(self):
-        self.total_reward = 0.0
-        self.count = 0
-        state = self.task.reset()
+    def reset(self):
+        state = self.task.reset().reshape((19,))
         return state
 
     def close(self):
-        self.sess.close()
+        return
+
+
+class DDPG_Agent:
+    def __init__(self):
+        rank = MPI.COMM_WORLD.Get_rank()
+        env = dummy_environment()
+        eval_env = dummy_environment(True)
+        # logger = Logger()
+        layer_norm = True
+        seed = 0
+        stddev = 0.2
+        param_noise = AdaptiveParamNoiseSpec(initial_stddev=stddev, desired_action_stddev=stddev)
+        action_noise = None
+        kwargs = {
+            'nb_epochs': 50,  # 500
+            'nb_epoch_cycles': 20,
+            'render_eval': False,
+            'reward_scale': 1.,
+            'render': False,
+            'normalize_returns': False,
+            'normalize_observations': False,
+            'critic_l2_reg': 1e-2,
+            'actor_lr': 1e-4,
+            'critic_lr': 1e-3,
+            'popart': False,
+            'gamma': 0.99,
+            'clip_norm': None,
+            'nb_train_steps': 50,
+            'nb_rollout_steps': 100,
+            'nb_eval_steps': 100,
+            'batch_size': 64
+        }
+
+        nb_actions = env.action_space.shape[-1]
+
+        # Configure components.
+        memory = Memory(limit=int(1e6), action_shape=env.action_space.shape, observation_shape=env.observation_space.shape)
+        critic = Critic(layer_norm=layer_norm)
+        actor = Actor(nb_actions, layer_norm=layer_norm)
+
+        # Seed everything to make things reproducible.
+        seed = seed + 1000000 * rank
+        logger.info('rank {}: seed={}, logdir={}'.format(rank, seed, logger.get_dir()))
+        tf.reset_default_graph()
+        # set_global_seeds(seed)
+        env.seed(seed)
+        if eval_env is not None:
+            eval_env.seed(seed)
+
+        # Disable logging for rank != 0 to avoid noise.
+        if rank == 0:
+            start_time = time.time()
+        training.train(env=env, eval_env=eval_env, param_noise=param_noise,
+                       action_noise=action_noise, actor=actor, critic=critic, memory=memory, **kwargs)
+        env.close()
+        if eval_env is not None:
+            eval_env.close()
+        if rank == 0:
+            logger.info('total runtime: {}s'.format(time.time() - start_time))
+        self.env = env
+
+    def train(self):
+        print("Training")
+        return self.env.results

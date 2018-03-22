@@ -22,36 +22,47 @@ class Task():
         self.state_size = self.action_repeat * 6
         self.action_low = 0
         self.action_high = 900
-        self.action_size = 4
+        self.action_size = 3
+        self.time_treshold = 10
 
         # Goal
         self.target_pos = target_pos if target_pos is not None else np.array([0., 0., 10.])
-
-        self.rotor_speeds = [0.01, 0.01, 0.01, 0.01]
+        self.target_pos = [np.array([0., 0., 10.]), np.array([0., 10., 0.])]
 
     def get_reward(self):
         """Uses current pose of sim to return reward."""
-        reward = 1. - .3 * (abs(self.sim.pose[:3] - self.target_pos)).sum()
-        reward = self.sim.pose[3]
+        # reward = 1. - .3 * (abs(self.sim.pose[:3] - self.target_pos)).sum()
+        if self.sim.time > self.time_treshold:
+            target_pos = self.target_pos[1]
+        else:
+            target_pos = self.target_pos[0]
+        reward = 1. - np.tanh(np.linalg.norm(self.sim.pose[:3] - target_pos) * 0.5)
         return reward
 
-    def step(self, rotor_speeds):
+    def step(self, rotor_speeds_):
         """Uses action to obtain next state, reward, done."""
-        self.rotor_speeds = [x + y for x, y in zip(self.rotor_speeds, rotor_speeds)]
-        # print(self.rotor_speeds)
+        rotor_speeds = np.array([.0, .0, .0, .0])
+        rotor_speeds[0] = rotor_speeds_[0] + ((rotor_speeds_[1] + rotor_speeds_[2])) * 0.1
+        rotor_speeds[1] = rotor_speeds_[0] + ((rotor_speeds_[1] - rotor_speeds_[2])) * 0.1
+        rotor_speeds[2] = rotor_speeds_[0] - ((rotor_speeds_[1] - rotor_speeds_[2])) * 0.1
+        rotor_speeds[3] = rotor_speeds_[0] - ((rotor_speeds_[1] + rotor_speeds_[2])) * 0.1
         reward = 0
         pose_all = []
         for _ in range(self.action_repeat):
-            done = self.sim.next_timestep(self.rotor_speeds)  # update the sim pose and velocities
+            done = self.sim.next_timestep(rotor_speeds)  # update the sim pose and velocities
             reward += self.get_reward()
             pose_all.append(self.sim.pose)
+        if self.sim.time > self.time_treshold:
+            flag = 1.0
+        else:
+            flag = 0.0
         next_state = np.concatenate(pose_all)
+        next_state = np.append(next_state, [flag])
         return next_state, reward, done
 
     def reset(self):
         """Reset the sim to start a new episode."""
         self.sim.reset()
         state = np.concatenate([self.sim.pose] * self.action_repeat)
-        self.rotor_speeds = [0.01, 0.01, 0.01, 0.01]
-        # print("RESET")
+        state = np.append(state, [0.0])
         return state
