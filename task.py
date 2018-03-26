@@ -26,7 +26,6 @@ class Task():
         self.time_treshold = 10
 
         # Goal
-        # self.target_pos = target_pos if target_pos is not None else np.array([0., 0., 10.])
         self.target_pos = np.array([0., 0., 60.])
 
     def get_reward(self):

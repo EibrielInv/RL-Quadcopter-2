@@ -19,8 +19,6 @@ class action_space:
     def __init__(self):
         self.shape = (3,)
         self.range = 2000
-        # self.low = np.array([-self.range, -self.range, -self.range, -self.range])
-        # self.high = np.array([self.range, self.range, self.range, self.range])
         self.low = np.array([-self.range, -1., -1.])
         self.high = np.array([self.range, 1., 1.])
 
@@ -48,9 +46,6 @@ class dummy_environment:
         self.reset_count = 0
 
     def gen_pose(self):
-        init_pose = np.random.uniform(-10, 10, 6)
-        init_pose += np.array([0.0, 0.0, 15.0, 0.0, 0.0, 0.0])
-        init_pose *= np.array([1.0, 1.0, 1.0, 0.0, 0.0, 0.0])
         init_pose = np.array([0.0, 0.0, 15.0, 0.0, 0.0, 0.0])
         return init_pose
 
@@ -58,13 +53,10 @@ class dummy_environment:
         self.seed = seed
 
     def step(self, action):
-        # action += self.action_space.range
         action += np.array([self.action_space.range, 0., 0.])
         new_obs, r, done = self.task.step(action)
         self.to_write = [self.global_time] + list(self.task.sim.pose) + list(self.task.sim.v) + list(self.task.sim.angular_v) + list(action) + [float(r)] + [self.episode_num] + list(self.task.state[:3])
-        # print(len(self.labels))
         for ii in range(len(self.labels)):
-            # print(self.to_write[ii])
             self.results[self.labels[ii]].append(self.to_write[ii])
         self.global_time += 1
         if self.eval:
