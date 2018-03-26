@@ -12213,7 +12213,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -12253,25 +12253,8 @@ div#notebook {
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-22-dd0e51a0d871&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span>     state <span class="ansi-blue-fg">=</span> agent<span class="ansi-blue-fg">.</span>reset_episode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-red-fg"># start a new episode</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span>     <span class="ansi-green-fg">while</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">         </span>action <span class="ansi-blue-fg">=</span> agent<span class="ansi-blue-fg">.</span>act<span class="ansi-blue-fg">(</span>state<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     15</span>         next_state<span class="ansi-blue-fg">,</span> reward<span class="ansi-blue-fg">,</span> done <span class="ansi-blue-fg">=</span> task<span class="ansi-blue-fg">.</span>step<span class="ansi-blue-fg">(</span>action<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     16</span>         agent<span class="ansi-blue-fg">.</span>step<span class="ansi-blue-fg">(</span>reward<span class="ansi-blue-fg">,</span> done<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/dev/RL-Quadcopter-2/agents/policy_search.py</span> in <span class="ansi-cyan-fg">act</span><span class="ansi-blue-fg">(self, state)</span>
-<span class="ansi-green-intense-fg ansi-bold">     42</span>     <span class="ansi-green-fg">def</span> act<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> state<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     43</span>         <span class="ansi-red-fg"># Choose action based on given state and policy</span>
-<span class="ansi-green-fg">---&gt; 44</span><span class="ansi-red-fg">         </span>action <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>dot<span class="ansi-blue-fg">(</span>state<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>w<span class="ansi-blue-fg">)</span>  <span class="ansi-red-fg"># simple linear policy</span>
-<span class="ansi-green-intense-fg ansi-bold">     45</span>         <span class="ansi-green-fg">return</span> action
-<span class="ansi-green-intense-fg ansi-bold">     46</span> 
-
-<span class="ansi-red-fg">ValueError</span>: shapes (19,) and (18,3) not aligned: 19 (dim 0) != 18 (dim 0)</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Episode = 1000, score =   0.000 (best =   0.000), noise_scale = 3.25</pre>
 </div>
 </div>
 
@@ -12327,7 +12310,7 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>rank 0: seed=0, logdir=None
-scaling actions by [600.   1.   1.] before executing in env
+scaling actions by [2.e+03 1.e+00 1.e+00] before executing in env
 setting up param noise
   param_noise_actor/dense/kernel:0 &lt;- actor/dense/kernel:0 + noise
   param_noise_actor/dense/bias:0 &lt;- actor/dense/bias:0 + noise
@@ -12350,15 +12333,15 @@ setting up param noise
   adaptive_param_noise_actor/dense_2/kernel:0 &lt;- actor/dense_2/kernel:0 + noise
   adaptive_param_noise_actor/dense_2/bias:0 &lt;- actor/dense_2/bias:0 + noise
 setting up actor optimizer
-  actor shapes: [[19, 64], [64], [64], [64], [64, 64], [64], [64], [64], [64, 3], [3]]
-  actor params: 5891
+  actor shapes: [[18, 64], [64], [64], [64], [64, 64], [64], [64], [64], [64, 3], [3]]
+  actor params: 5827
 setting up critic optimizer
   regularizing: critic/dense/kernel:0
   regularizing: critic/dense_1/kernel:0
   regularizing: critic/dense_2/kernel:0
   applying l2 regularization with 0.01
-  critic shapes: [[19, 64], [64], [64], [64], [67, 64], [64], [64], [64], [64, 1], [1]]
-  critic params: 5953
+  critic shapes: [[18, 64], [64], [64], [64], [67, 64], [64], [64], [64], [64, 1], [1]]
+  critic params: 5889
 WARNING:tensorflow:From /home/gabriel/dev/RL-Quadcopter-2/agents/ddpg.py:29: calling reduce_mean (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
 Instructions for updating:
 keep_dims is deprecated, use keepdims instead
@@ -12385,1482 +12368,1458 @@ setting up target updates ...
   target_critic/dense_2/kernel:0 &lt;- critic/dense_2/kernel:0
   target_critic/dense_2/bias:0 &lt;- critic/dense_2/bias:0
 Using agent with the following configuration:
-dict_items([(&#39;obs0&#39;, &lt;tf.Tensor &#39;obs0:0&#39; shape=(?, 19) dtype=float32&gt;), (&#39;obs1&#39;, &lt;tf.Tensor &#39;obs1:0&#39; shape=(?, 19) dtype=float32&gt;), (&#39;terminals1&#39;, &lt;tf.Tensor &#39;terminals1:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;rewards&#39;, &lt;tf.Tensor &#39;rewards:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;actions&#39;, &lt;tf.Tensor &#39;actions:0&#39; shape=(?, 3) dtype=float32&gt;), (&#39;critic_target&#39;, &lt;tf.Tensor &#39;critic_target:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;param_noise_stddev&#39;, &lt;tf.Tensor &#39;param_noise_stddev:0&#39; shape=() dtype=float32&gt;), (&#39;gamma&#39;, 0.99), (&#39;tau&#39;, 0.01), (&#39;memory&#39;, &lt;agents.memory.Memory object at 0x7f13edf728d0&gt;), (&#39;normalize_observations&#39;, False), (&#39;normalize_returns&#39;, False), (&#39;action_noise&#39;, None), (&#39;param_noise&#39;, AdaptiveParamNoiseSpec(initial_stddev=0.2, desired_action_stddev=0.2, adoption_coefficient=1.01)), (&#39;action_range&#39;, (-1.0, 1.0)), (&#39;return_range&#39;, (-inf, inf)), (&#39;observation_range&#39;, (-5.0, 5.0)), (&#39;critic&#39;, &lt;agents.models.Critic object at 0x7f13edf72a20&gt;), (&#39;actor&#39;, &lt;agents.models.Actor object at 0x7f13edf72a58&gt;), (&#39;actor_lr&#39;, 0.0001), (&#39;critic_lr&#39;, 0.001), (&#39;clip_norm&#39;, None), (&#39;enable_popart&#39;, False), (&#39;reward_scale&#39;, 1.0), (&#39;batch_size&#39;, 64), (&#39;stats_sample&#39;, None), (&#39;critic_l2_reg&#39;, 0.01), (&#39;obs_rms&#39;, None), (&#39;ret_rms&#39;, None), (&#39;target_actor&#39;, &lt;agents.models.Actor object at 0x7f13edf72ef0&gt;), (&#39;target_critic&#39;, &lt;agents.models.Critic object at 0x7f13edf72f28&gt;), (&#39;actor_tf&#39;, &lt;tf.Tensor &#39;actor/Tanh:0&#39; shape=(?, 3) dtype=float32&gt;), (&#39;normalized_critic_tf&#39;, &lt;tf.Tensor &#39;critic/dense_2/BiasAdd:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;critic_tf&#39;, &lt;tf.Tensor &#39;clip_by_value_2:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;normalized_critic_with_actor_tf&#39;, &lt;tf.Tensor &#39;critic_1/dense_2/BiasAdd:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;critic_with_actor_tf&#39;, &lt;tf.Tensor &#39;clip_by_value_3:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;target_Q&#39;, &lt;tf.Tensor &#39;add:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;perturbed_actor_tf&#39;, &lt;tf.Tensor &#39;param_noise_actor/Tanh:0&#39; shape=(?, 3) dtype=float32&gt;), (&#39;perturb_policy_ops&#39;, &lt;tf.Operation &#39;group_deps&#39; type=NoOp&gt;), (&#39;perturb_adaptive_policy_ops&#39;, &lt;tf.Operation &#39;group_deps_1&#39; type=NoOp&gt;), (&#39;adaptive_policy_distance&#39;, &lt;tf.Tensor &#39;Sqrt:0&#39; shape=() dtype=float32&gt;), (&#39;actor_loss&#39;, &lt;tf.Tensor &#39;Neg:0&#39; shape=() dtype=float32&gt;), (&#39;actor_grads&#39;, &lt;tf.Tensor &#39;concat:0&#39; shape=(5891,) dtype=float32&gt;), (&#39;actor_optimizer&#39;, &lt;agents.baselines.common.mpi_adam.MpiAdam object at 0x7f13e4724278&gt;), (&#39;critic_loss&#39;, &lt;tf.Tensor &#39;add_13:0&#39; shape=() dtype=float32&gt;), (&#39;critic_grads&#39;, &lt;tf.Tensor &#39;concat_2:0&#39; shape=(5953,) dtype=float32&gt;), (&#39;critic_optimizer&#39;, &lt;agents.baselines.common.mpi_adam.MpiAdam object at 0x7f13e2cbff98&gt;), (&#39;stats_ops&#39;, [&lt;tf.Tensor &#39;Mean_3:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_1:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Mean_6:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_2:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Mean_9:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_3:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Mean_12:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_4:0&#39; shape=() dtype=float32&gt;]), (&#39;stats_names&#39;, [&#39;reference_Q_mean&#39;, &#39;reference_Q_std&#39;, &#39;reference_actor_Q_mean&#39;, &#39;reference_actor_Q_std&#39;, &#39;reference_action_mean&#39;, &#39;reference_action_std&#39;, &#39;reference_perturbed_action_mean&#39;, &#39;reference_perturbed_action_std&#39;]), (&#39;target_init_updates&#39;, [&lt;tf.Operation &#39;group_deps_4&#39; type=NoOp&gt;, &lt;tf.Operation &#39;group_deps_6&#39; type=NoOp&gt;]), (&#39;target_soft_updates&#39;, [&lt;tf.Operation &#39;group_deps_5&#39; type=NoOp&gt;, &lt;tf.Operation &#39;group_deps_7&#39; type=NoOp&gt;])])
+dict_items([(&#39;obs0&#39;, &lt;tf.Tensor &#39;obs0:0&#39; shape=(?, 18) dtype=float32&gt;), (&#39;obs1&#39;, &lt;tf.Tensor &#39;obs1:0&#39; shape=(?, 18) dtype=float32&gt;), (&#39;terminals1&#39;, &lt;tf.Tensor &#39;terminals1:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;rewards&#39;, &lt;tf.Tensor &#39;rewards:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;actions&#39;, &lt;tf.Tensor &#39;actions:0&#39; shape=(?, 3) dtype=float32&gt;), (&#39;critic_target&#39;, &lt;tf.Tensor &#39;critic_target:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;param_noise_stddev&#39;, &lt;tf.Tensor &#39;param_noise_stddev:0&#39; shape=() dtype=float32&gt;), (&#39;gamma&#39;, 0.99), (&#39;tau&#39;, 0.01), (&#39;memory&#39;, &lt;agents.memory.Memory object at 0x7f3249fad8d0&gt;), (&#39;normalize_observations&#39;, False), (&#39;normalize_returns&#39;, False), (&#39;action_noise&#39;, None), (&#39;param_noise&#39;, AdaptiveParamNoiseSpec(initial_stddev=0.2, desired_action_stddev=0.2, adoption_coefficient=1.01)), (&#39;action_range&#39;, (-1.0, 1.0)), (&#39;return_range&#39;, (-inf, inf)), (&#39;observation_range&#39;, (-5.0, 5.0)), (&#39;critic&#39;, &lt;agents.models.Critic object at 0x7f3249fada20&gt;), (&#39;actor&#39;, &lt;agents.models.Actor object at 0x7f3249fada58&gt;), (&#39;actor_lr&#39;, 0.0001), (&#39;critic_lr&#39;, 0.001), (&#39;clip_norm&#39;, None), (&#39;enable_popart&#39;, False), (&#39;reward_scale&#39;, 1.0), (&#39;batch_size&#39;, 64), (&#39;stats_sample&#39;, None), (&#39;critic_l2_reg&#39;, 0.01), (&#39;obs_rms&#39;, None), (&#39;ret_rms&#39;, None), (&#39;target_actor&#39;, &lt;agents.models.Actor object at 0x7f3249fadef0&gt;), (&#39;target_critic&#39;, &lt;agents.models.Critic object at 0x7f3249fadf28&gt;), (&#39;actor_tf&#39;, &lt;tf.Tensor &#39;actor/Tanh:0&#39; shape=(?, 3) dtype=float32&gt;), (&#39;normalized_critic_tf&#39;, &lt;tf.Tensor &#39;critic/dense_2/BiasAdd:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;critic_tf&#39;, &lt;tf.Tensor &#39;clip_by_value_2:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;normalized_critic_with_actor_tf&#39;, &lt;tf.Tensor &#39;critic_1/dense_2/BiasAdd:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;critic_with_actor_tf&#39;, &lt;tf.Tensor &#39;clip_by_value_3:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;target_Q&#39;, &lt;tf.Tensor &#39;add:0&#39; shape=(?, 1) dtype=float32&gt;), (&#39;perturbed_actor_tf&#39;, &lt;tf.Tensor &#39;param_noise_actor/Tanh:0&#39; shape=(?, 3) dtype=float32&gt;), (&#39;perturb_policy_ops&#39;, &lt;tf.Operation &#39;group_deps&#39; type=NoOp&gt;), (&#39;perturb_adaptive_policy_ops&#39;, &lt;tf.Operation &#39;group_deps_1&#39; type=NoOp&gt;), (&#39;adaptive_policy_distance&#39;, &lt;tf.Tensor &#39;Sqrt:0&#39; shape=() dtype=float32&gt;), (&#39;actor_loss&#39;, &lt;tf.Tensor &#39;Neg:0&#39; shape=() dtype=float32&gt;), (&#39;actor_grads&#39;, &lt;tf.Tensor &#39;concat:0&#39; shape=(5827,) dtype=float32&gt;), (&#39;actor_optimizer&#39;, &lt;agents.baselines.common.mpi_adam.MpiAdam object at 0x7f3240766358&gt;), (&#39;critic_loss&#39;, &lt;tf.Tensor &#39;add_13:0&#39; shape=() dtype=float32&gt;), (&#39;critic_grads&#39;, &lt;tf.Tensor &#39;concat_2:0&#39; shape=(5889,) dtype=float32&gt;), (&#39;critic_optimizer&#39;, &lt;agents.baselines.common.mpi_adam.MpiAdam object at 0x7f323f369f98&gt;), (&#39;stats_ops&#39;, [&lt;tf.Tensor &#39;Mean_3:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_1:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Mean_6:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_2:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Mean_9:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_3:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Mean_12:0&#39; shape=() dtype=float32&gt;, &lt;tf.Tensor &#39;Sqrt_4:0&#39; shape=() dtype=float32&gt;]), (&#39;stats_names&#39;, [&#39;reference_Q_mean&#39;, &#39;reference_Q_std&#39;, &#39;reference_actor_Q_mean&#39;, &#39;reference_actor_Q_std&#39;, &#39;reference_action_mean&#39;, &#39;reference_action_std&#39;, &#39;reference_perturbed_action_mean&#39;, &#39;reference_perturbed_action_std&#39;]), (&#39;target_init_updates&#39;, [&lt;tf.Operation &#39;group_deps_4&#39; type=NoOp&gt;, &lt;tf.Operation &#39;group_deps_6&#39; type=NoOp&gt;]), (&#39;target_soft_updates&#39;, [&lt;tf.Operation &#39;group_deps_5&#39; type=NoOp&gt;, &lt;tf.Operation &#39;group_deps_7&#39; type=NoOp&gt;])])
 --------------------------------------
-| eval/episodes           | 4        |
-| eval/return             | 19.9     |
-| eval/return_history     | 17.2     |
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 1.08     |
 | param_noise_stddev      | 0.164    |
-| reference_Q_mean        | 4.79     |
-| reference_Q_std         | 4.16     |
-| reference_action_mean   | -0.295   |
-| reference_action_std    | 0.885    |
-| reference_actor_Q_mean  | 5.22     |
-| reference_actor_Q_std   | 4.33     |
-| reference_perturbed_... | 0.531    |
-| rollout/Q_mean          | 2.23     |
-| rollout/actions_mean    | 0.0436   |
-| rollout/actions_std     | 0.673    |
-| rollout/episode_steps   | 95       |
-| rollout/episodes        | 21       |
-| rollout/return          | 22       |
-| rollout/return_history  | 22       |
-| total/duration          | 24.5     |
-| total/episodes          | 21       |
+| reference_Q_mean        | 0.838    |
+| reference_Q_std         | 1.11     |
+| reference_action_mean   | -0.273   |
+| reference_action_std    | 0.782    |
+| reference_actor_Q_mean  | 0.965    |
+| reference_actor_Q_std   | 1.24     |
+| reference_perturbed_... | 0.723    |
+| rollout/Q_mean          | 0.493    |
+| rollout/actions_mean    | -0.219   |
+| rollout/actions_std     | 0.603    |
+| rollout/episode_steps   | 62.4     |
+| rollout/episodes        | 32       |
+| rollout/return          | 2.19     |
+| rollout/return_history  | 2.19     |
+| total/duration          | 24.1     |
+| total/episodes          | 32       |
 | total/epochs            | 1        |
 | total/steps             | 2000     |
-| total/steps_per_second  | 81.5     |
-| train/loss_actor        | -4.02    |
-| train/loss_critic       | 0.393    |
-| train/param_noise_di... | 0.798    |
+| total/steps_per_second  | 82.8     |
+| train/loss_actor        | -1.06    |
+| train/loss_critic       | 0.0673   |
+| train/param_noise_di... | 0.725    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 1.65e-11 |
-| eval/return_history     | 23.7     |
-| param_noise_stddev      | 0.14     |
-| reference_Q_mean        | 8.31     |
-| reference_Q_std         | 9.14     |
-| reference_action_mean   | 0.407    |
-| reference_action_std    | 0.658    |
-| reference_actor_Q_mean  | 8.57     |
-| reference_actor_Q_std   | 9.27     |
-| reference_perturbed_... | 0.809    |
-| rollout/Q_mean          | 4.03     |
-| rollout/actions_mean    | 0.0631   |
-| rollout/actions_std     | 0.687    |
-| rollout/episode_steps   | 86.2     |
-| rollout/episodes        | 44       |
-| rollout/return          | 25       |
-| rollout/return_history  | 25       |
-| total/duration          | 49.3     |
-| total/episodes          | 44       |
+| eval/return             | 4        |
+| eval/return_history     | 2.81     |
+| param_noise_stddev      | 0.137    |
+| reference_Q_mean        | 1.33     |
+| reference_Q_std         | 2.04     |
+| reference_action_mean   | -0.335   |
+| reference_action_std    | 0.713    |
+| reference_actor_Q_mean  | 1.36     |
+| reference_actor_Q_std   | 2.13     |
+| reference_perturbed_... | 0.563    |
+| rollout/Q_mean          | 1.16     |
+| rollout/actions_mean    | -0.26    |
+| rollout/actions_std     | 0.675    |
+| rollout/episode_steps   | 65.8     |
+| rollout/episodes        | 60       |
+| rollout/return          | 2.65     |
+| rollout/return_history  | 2.65     |
+| total/duration          | 48.4     |
+| total/episodes          | 60       |
 | total/epochs            | 2        |
 | total/steps             | 4000     |
-| total/steps_per_second  | 81.2     |
-| train/loss_actor        | -7.51    |
-| train/loss_critic       | 3.06     |
-| train/param_noise_di... | 0.497    |
+| total/steps_per_second  | 82.6     |
+| train/loss_actor        | -1.71    |
+| train/loss_critic       | 0.182    |
+| train/param_noise_di... | 0.659    |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 0        |
-| eval/return_history     | 20.2     |
+| eval/episodes           | 2        |
+| eval/return             | 1.5      |
+| eval/return_history     | 2.35     |
 | param_noise_stddev      | 0.115    |
-| reference_Q_mean        | 10.7     |
-| reference_Q_std         | 12.3     |
-| reference_action_mean   | 0.405    |
-| reference_action_std    | 0.696    |
-| reference_actor_Q_mean  | 11       |
-| reference_actor_Q_std   | 12.5     |
-| reference_perturbed_... | 0.596    |
-| rollout/Q_mean          | 6.18     |
-| rollout/actions_mean    | 0.162    |
-| rollout/actions_std     | 0.676    |
-| rollout/episode_steps   | 99.8     |
-| rollout/episodes        | 59       |
-| rollout/return          | 24.2     |
-| rollout/return_history  | 24.2     |
-| total/duration          | 73.3     |
-| total/episodes          | 59       |
+| reference_Q_mean        | 1.65     |
+| reference_Q_std         | 2.92     |
+| reference_action_mean   | -0.0846  |
+| reference_action_std    | 0.757    |
+| reference_actor_Q_mean  | 1.86     |
+| reference_actor_Q_std   | 3.2      |
+| reference_perturbed_... | 0.397    |
+| rollout/Q_mean          | 1.74     |
+| rollout/actions_mean    | -0.22    |
+| rollout/actions_std     | 0.691    |
+| rollout/episode_steps   | 68.2     |
+| rollout/episodes        | 87       |
+| rollout/return          | 4.11     |
+| rollout/return_history  | 4.11     |
+| total/duration          | 73.5     |
+| total/episodes          | 87       |
 | total/epochs            | 3        |
 | total/steps             | 6000     |
-| total/steps_per_second  | 81.8     |
-| train/loss_actor        | -9.63    |
-| train/loss_critic       | 3.34     |
-| train/param_noise_di... | 0.791    |
+| total/steps_per_second  | 81.7     |
+| train/loss_actor        | -2.85    |
+| train/loss_critic       | 0.519    |
+| train/param_noise_di... | 0.417    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
 | eval/return             | 0        |
-| eval/return_history     | 18       |
+| eval/return_history     | 2.03     |
 | param_noise_stddev      | 0.0939   |
-| reference_Q_mean        | 13.4     |
-| reference_Q_std         | 15.4     |
-| reference_action_mean   | 0.295    |
-| reference_action_std    | 0.843    |
-| reference_actor_Q_mean  | 13.9     |
-| reference_actor_Q_std   | 15.9     |
-| reference_perturbed_... | 0.768    |
-| rollout/Q_mean          | 6.67     |
-| rollout/actions_mean    | 0.173    |
-| rollout/actions_std     | 0.654    |
-| rollout/episode_steps   | 109      |
-| rollout/episodes        | 73       |
-| rollout/return          | 23.8     |
-| rollout/return_history  | 23.8     |
-| total/duration          | 98.7     |
-| total/episodes          | 73       |
+| reference_Q_mean        | 2.61     |
+| reference_Q_std         | 4.75     |
+| reference_action_mean   | 0.143    |
+| reference_action_std    | 0.904    |
+| reference_actor_Q_mean  | 2.88     |
+| reference_actor_Q_std   | 5.11     |
+| reference_perturbed_... | 0.805    |
+| rollout/Q_mean          | 2.22     |
+| rollout/actions_mean    | -0.231   |
+| rollout/actions_std     | 0.706    |
+| rollout/episode_steps   | 70.1     |
+| rollout/episodes        | 114      |
+| rollout/return          | 4.37     |
+| rollout/return_history  | 4.71     |
+| total/duration          | 99       |
+| total/episodes          | 114      |
 | total/epochs            | 4        |
 | total/steps             | 8000     |
-| total/steps_per_second  | 81.1     |
-| train/loss_actor        | -11.6    |
-| train/loss_critic       | 6.5      |
-| train/param_noise_di... | 0.571    |
+| total/steps_per_second  | 80.8     |
+| train/loss_actor        | -4.01    |
+| train/loss_critic       | 0.725    |
+| train/param_noise_di... | 0.357    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
 | eval/return             | 0        |
-| eval/return_history     | 15.7     |
+| eval/return_history     | 2.27     |
 | param_noise_stddev      | 0.0769   |
-| reference_Q_mean        | 15.1     |
-| reference_Q_std         | 17.9     |
-| reference_action_mean   | 0.465    |
-| reference_action_std    | 0.783    |
-| reference_actor_Q_mean  | 15.6     |
-| reference_actor_Q_std   | 18.3     |
-| reference_perturbed_... | 0.593    |
-| rollout/Q_mean          | 7.55     |
-| rollout/actions_mean    | 0.226    |
-| rollout/actions_std     | 0.642    |
-| rollout/episode_steps   | 114      |
-| rollout/episodes        | 87       |
-| rollout/return          | 22.6     |
-| rollout/return_history  | 22.6     |
-| total/duration          | 124      |
-| total/episodes          | 87       |
+| reference_Q_mean        | 3.36     |
+| reference_Q_std         | 5.7      |
+| reference_action_mean   | 0.163    |
+| reference_action_std    | 0.908    |
+| reference_actor_Q_mean  | 3.71     |
+| reference_actor_Q_std   | 5.98     |
+| reference_perturbed_... | 0.85     |
+| rollout/Q_mean          | 3.01     |
+| rollout/actions_mean    | -0.215   |
+| rollout/actions_std     | 0.721    |
+| rollout/episode_steps   | 71.8     |
+| rollout/episodes        | 139      |
+| rollout/return          | 5.27     |
+| rollout/return_history  | 6.49     |
+| total/duration          | 126      |
+| total/episodes          | 139      |
 | total/epochs            | 5        |
 | total/steps             | 10000    |
-| total/steps_per_second  | 80.6     |
-| train/loss_actor        | -12.4    |
-| train/loss_critic       | 12.5     |
+| total/steps_per_second  | 79.7     |
+| train/loss_actor        | -5.56    |
+| train/loss_critic       | 1.08     |
+| train/param_noise_di... | 0.328    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 2.21     |
+| param_noise_stddev      | 0.0643   |
+| reference_Q_mean        | 4.64     |
+| reference_Q_std         | 7.4      |
+| reference_action_mean   | 0.257    |
+| reference_action_std    | 0.874    |
+| reference_actor_Q_mean  | 5.06     |
+| reference_actor_Q_std   | 7.93     |
+| reference_perturbed_... | 0.846    |
+| rollout/Q_mean          | 4.12     |
+| rollout/actions_mean    | -0.187   |
+| rollout/actions_std     | 0.734    |
+| rollout/episode_steps   | 71.7     |
+| rollout/episodes        | 167      |
+| rollout/return          | 7.89     |
+| rollout/return_history  | 11.3     |
+| total/duration          | 153      |
+| total/episodes          | 167      |
+| total/epochs            | 6        |
+| total/steps             | 12000    |
+| total/steps_per_second  | 78.5     |
+| train/loss_actor        | -7.63    |
+| train/loss_critic       | 1.57     |
+| train/param_noise_di... | 0.374    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 13       |
+| eval/return_history     | 2.84     |
+| param_noise_stddev      | 0.0527   |
+| reference_Q_mean        | 5.55     |
+| reference_Q_std         | 8.77     |
+| reference_action_mean   | 0.269    |
+| reference_action_std    | 0.869    |
+| reference_actor_Q_mean  | 5.88     |
+| reference_actor_Q_std   | 9.08     |
+| reference_perturbed_... | 0.84     |
+| rollout/Q_mean          | 4.72     |
+| rollout/actions_mean    | -0.156   |
+| rollout/actions_std     | 0.75     |
+| rollout/episode_steps   | 73       |
+| rollout/episodes        | 191      |
+| rollout/return          | 8.08     |
+| rollout/return_history  | 11.6     |
+| total/duration          | 181      |
+| total/episodes          | 191      |
+| total/epochs            | 7        |
+| total/steps             | 14000    |
+| total/steps_per_second  | 77.4     |
+| train/loss_actor        | -9.06    |
+| train/loss_critic       | 3.35     |
+| train/param_noise_di... | 0.326    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 2        |
+| eval/return             | 8.5      |
+| eval/return_history     | 3.58     |
+| param_noise_stddev      | 0.0432   |
+| reference_Q_mean        | 6.35     |
+| reference_Q_std         | 8.85     |
+| reference_action_mean   | 0.218    |
+| reference_action_std    | 0.859    |
+| reference_actor_Q_mean  | 6.83     |
+| reference_actor_Q_std   | 9.39     |
+| reference_perturbed_... | 0.821    |
+| rollout/Q_mean          | 5.44     |
+| rollout/actions_mean    | -0.156   |
+| rollout/actions_std     | 0.754    |
+| rollout/episode_steps   | 74.2     |
+| rollout/episodes        | 215      |
+| rollout/return          | 8.01     |
+| rollout/return_history  | 12.2     |
+| total/duration          | 210      |
+| total/episodes          | 215      |
+| total/epochs            | 8        |
+| total/steps             | 16000    |
+| total/steps_per_second  | 76.2     |
+| train/loss_actor        | -10.2    |
+| train/loss_critic       | 3.04     |
+| train/param_noise_di... | 0.328    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 5.92     |
+| param_noise_stddev      | 0.0361   |
+| reference_Q_mean        | 7.11     |
+| reference_Q_std         | 9.07     |
+| reference_action_mean   | -0.0899  |
+| reference_action_std    | 0.888    |
+| reference_actor_Q_mean  | 7.55     |
+| reference_actor_Q_std   | 9.52     |
+| reference_perturbed_... | 0.884    |
+| rollout/Q_mean          | 6.07     |
+| rollout/actions_mean    | -0.157   |
+| rollout/actions_std     | 0.757    |
+| rollout/episode_steps   | 75.1     |
+| rollout/episodes        | 239      |
+| rollout/return          | 7.94     |
+| rollout/return_history  | 11.6     |
+| total/duration          | 240      |
+| total/episodes          | 239      |
+| total/epochs            | 9        |
+| total/steps             | 18000    |
+| total/steps_per_second  | 75.1     |
+| train/loss_actor        | -11      |
+| train/loss_critic       | 2.95     |
+| train/param_noise_di... | 0.436    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 7.06     |
+| param_noise_stddev      | 0.0296   |
+| reference_Q_mean        | 7.09     |
+| reference_Q_std         | 9.7      |
+| reference_action_mean   | 0.0288   |
+| reference_action_std    | 0.893    |
+| reference_actor_Q_mean  | 7.76     |
+| reference_actor_Q_std   | 10.5     |
+| reference_perturbed_... | 0.895    |
+| rollout/Q_mean          | 6.57     |
+| rollout/actions_mean    | -0.159   |
+| rollout/actions_std     | 0.767    |
+| rollout/episode_steps   | 75.8     |
+| rollout/episodes        | 263      |
+| rollout/return          | 7.73     |
+| rollout/return_history  | 7.92     |
+| total/duration          | 270      |
+| total/episodes          | 263      |
+| total/epochs            | 10       |
+| total/steps             | 20000    |
+| total/steps_per_second  | 74.1     |
+| train/loss_actor        | -10.9    |
+| train/loss_critic       | 2.69     |
 | train/param_noise_di... | 0.483    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 7.73e-14 |
-| eval/return_history     | 14.8     |
-| param_noise_stddev      | 0.0631   |
-| reference_Q_mean        | 17.2     |
-| reference_Q_std         | 21       |
-| reference_action_mean   | 0.232    |
-| reference_action_std    | 0.841    |
-| reference_actor_Q_mean  | 17.8     |
-| reference_actor_Q_std   | 21.4     |
-| reference_perturbed_... | 0.705    |
-| rollout/Q_mean          | 9.5      |
-| rollout/actions_mean    | 0.252    |
-| rollout/actions_std     | 0.646    |
-| rollout/episode_steps   | 118      |
-| rollout/episodes        | 100      |
-| rollout/return          | 23.7     |
-| rollout/return_history  | 23.7     |
-| total/duration          | 150      |
-| total/episodes          | 100      |
-| total/epochs            | 6        |
-| total/steps             | 12000    |
-| total/steps_per_second  | 80       |
-| train/loss_actor        | -15.5    |
-| train/loss_critic       | 8.06     |
-| train/param_noise_di... | 0.382    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 3        |
-| eval/return             | 25.8     |
-| eval/return_history     | 12       |
-| param_noise_stddev      | 0.0517   |
-| reference_Q_mean        | 18.5     |
-| reference_Q_std         | 23.6     |
-| reference_action_mean   | 0.255    |
-| reference_action_std    | 0.845    |
-| reference_actor_Q_mean  | 19.1     |
-| reference_actor_Q_std   | 24       |
-| reference_perturbed_... | 0.808    |
-| rollout/Q_mean          | 10.1     |
-| rollout/actions_mean    | 0.245    |
-| rollout/actions_std     | 0.66     |
-| rollout/episode_steps   | 121      |
-| rollout/episodes        | 115      |
-| rollout/return          | 26.8     |
-| rollout/return_history  | 28.2     |
-| total/duration          | 175      |
-| total/episodes          | 115      |
-| total/epochs            | 7        |
-| total/steps             | 14000    |
-| total/steps_per_second  | 79.9     |
-| train/loss_actor        | -17      |
-| train/loss_critic       | 28.2     |
-| train/param_noise_di... | 0.243    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 5        |
-| eval/return             | 20.6     |
-| eval/return_history     | 22.8     |
-| param_noise_stddev      | 0.0487   |
-| reference_Q_mean        | 19.4     |
-| reference_Q_std         | 24.5     |
-| reference_action_mean   | 0.201    |
-| reference_action_std    | 0.923    |
-| reference_actor_Q_mean  | 20.3     |
-| reference_actor_Q_std   | 25.5     |
-| reference_perturbed_... | 0.886    |
-| rollout/Q_mean          | 12.1     |
-| rollout/actions_mean    | 0.225    |
-| rollout/actions_std     | 0.686    |
-| rollout/episode_steps   | 109      |
-| rollout/episodes        | 146      |
-| rollout/return          | 27.9     |
-| rollout/return_history  | 29.4     |
-| total/duration          | 201      |
-| total/episodes          | 146      |
-| total/epochs            | 8        |
-| total/steps             | 16000    |
-| total/steps_per_second  | 79.4     |
-| train/loss_actor        | -18.8    |
-| train/loss_critic       | 28.9     |
-| train/param_noise_di... | 0.232    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 20       |
-| param_noise_stddev      | 0.0497   |
-| reference_Q_mean        | 21.1     |
-| reference_Q_std         | 25.2     |
-| reference_action_mean   | 0.537    |
-| reference_action_std    | 0.747    |
-| reference_actor_Q_mean  | 22.1     |
-| reference_actor_Q_std   | 26.3     |
-| reference_perturbed_... | 0.763    |
-| rollout/Q_mean          | 13.8     |
-| rollout/actions_mean    | 0.235    |
-| rollout/actions_std     | 0.7      |
-| rollout/episode_steps   | 104      |
-| rollout/episodes        | 172      |
-| rollout/return          | 27.8     |
-| rollout/return_history  | 31       |
-| total/duration          | 227      |
-| total/episodes          | 172      |
-| total/epochs            | 9        |
-| total/steps             | 18000    |
-| total/steps_per_second  | 79.4     |
-| train/loss_actor        | -22.1    |
-| train/loss_critic       | 25.3     |
-| train/param_noise_di... | 0.198    |
---------------------------------------
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/gabriel/miniconda2/envs/quadcop/lib/python3.6/site-packages/numpy/core/fromnumeric.py:2957: RuntimeWarning: Mean of empty slice.
-  out=out, **kwargs)
-/home/gabriel/miniconda2/envs/quadcop/lib/python3.6/site-packages/numpy/core/_methods.py:80: RuntimeWarning: invalid value encountered in double_scalars
-  ret = ret.dtype.type(ret / rcount)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>--------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 16.7     |
-| param_noise_stddev      | 0.0441   |
-| reference_Q_mean        | 21.4     |
-| reference_Q_std         | 25.5     |
-| reference_action_mean   | 0.743    |
-| reference_action_std    | 0.48     |
-| reference_actor_Q_mean  | 22.3     |
-| reference_actor_Q_std   | 26.4     |
-| reference_perturbed_... | 0.625    |
-| rollout/Q_mean          | 14.3     |
-| rollout/actions_mean    | 0.273    |
-| rollout/actions_std     | 0.703    |
-| rollout/episode_steps   | 104      |
-| rollout/episodes        | 192      |
-| rollout/return          | 26.9     |
-| rollout/return_history  | 30.4     |
-| total/duration          | 253      |
-| total/episodes          | 192      |
-| total/epochs            | 10       |
-| total/steps             | 20000    |
-| total/steps_per_second  | 79.1     |
-| train/loss_actor        | -22.3    |
-| train/loss_critic       | 34.7     |
-| train/param_noise_di... | 0.281    |
+| eval/return             | 0        |
+| eval/return_history     | 9.05     |
+| param_noise_stddev      | 0.0252   |
+| reference_Q_mean        | 7.34     |
+| reference_Q_std         | 10.8     |
+| reference_action_mean   | 0.119    |
+| reference_action_std    | 0.89     |
+| reference_actor_Q_mean  | 7.86     |
+| reference_actor_Q_std   | 11.6     |
+| reference_perturbed_... | 0.879    |
+| rollout/Q_mean          | 6.98     |
+| rollout/actions_mean    | -0.153   |
+| rollout/actions_std     | 0.774    |
+| rollout/episode_steps   | 76.3     |
+| rollout/episodes        | 288      |
+| rollout/return          | 7.69     |
+| rollout/return_history  | 6.84     |
+| total/duration          | 301      |
+| total/episodes          | 288      |
+| total/epochs            | 11       |
+| total/steps             | 22000    |
+| total/steps_per_second  | 73.2     |
+| train/loss_actor        | -11.1    |
+| train/loss_critic       | 4.75     |
+| train/param_noise_di... | 0.299    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
 | eval/return             | 0        |
-| eval/return_history     | 14.6     |
-| param_noise_stddev      | 0.0391   |
-| reference_Q_mean        | 21.7     |
-| reference_Q_std         | 27.5     |
-| reference_action_mean   | 0.615    |
-| reference_action_std    | 0.707    |
-| reference_actor_Q_mean  | 22.7     |
-| reference_actor_Q_std   | 28.9     |
-| reference_perturbed_... | 0.697    |
-| rollout/Q_mean          | 15.3     |
-| rollout/actions_mean    | 0.297    |
-| rollout/actions_std     | 0.706    |
-| rollout/episode_steps   | 106      |
-| rollout/episodes        | 207      |
-| rollout/return          | 27       |
-| rollout/return_history  | 29.2     |
-| total/duration          | 279      |
-| total/episodes          | 207      |
-| total/epochs            | 11       |
-| total/steps             | 22000    |
-| total/steps_per_second  | 78.9     |
-| train/loss_actor        | -20.9    |
-| train/loss_critic       | 23.1     |
-| train/param_noise_di... | 0.152    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 3.95     |
-| eval/return_history     | 15.3     |
-| param_noise_stddev      | 0.0354   |
-| reference_Q_mean        | 21.4     |
-| reference_Q_std         | 26.4     |
-| reference_action_mean   | 0.648    |
-| reference_action_std    | 0.679    |
-| reference_actor_Q_mean  | 22.7     |
-| reference_actor_Q_std   | 28.1     |
-| reference_perturbed_... | 0.733    |
-| rollout/Q_mean          | 17       |
-| rollout/actions_mean    | 0.303    |
-| rollout/actions_std     | 0.71     |
-| rollout/episode_steps   | 108      |
-| rollout/episodes        | 221      |
-| rollout/return          | 28.3     |
-| rollout/return_history  | 29.1     |
-| total/duration          | 304      |
-| total/episodes          | 221      |
+| eval/return_history     | 7.95     |
+| param_noise_stddev      | 0.022    |
+| reference_Q_mean        | 7.2      |
+| reference_Q_std         | 11       |
+| reference_action_mean   | 0.175    |
+| reference_action_std    | 0.898    |
+| reference_actor_Q_mean  | 7.97     |
+| reference_actor_Q_std   | 11.9     |
+| reference_perturbed_... | 0.89     |
+| rollout/Q_mean          | 7.37     |
+| rollout/actions_mean    | -0.129   |
+| rollout/actions_std     | 0.787    |
+| rollout/episode_steps   | 76.8     |
+| rollout/episodes        | 312      |
+| rollout/return          | 7.68     |
+| rollout/return_history  | 6.78     |
+| total/duration          | 332      |
+| total/episodes          | 312      |
 | total/epochs            | 12       |
 | total/steps             | 24000    |
-| total/steps_per_second  | 78.9     |
-| train/loss_actor        | -24.9    |
-| train/loss_critic       | 40.4     |
-| train/param_noise_di... | 0.38     |
+| total/steps_per_second  | 72.3     |
+| train/loss_actor        | -11      |
+| train/loss_critic       | 1.79     |
+| train/param_noise_di... | 0.356    |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 13.7     |
-| param_noise_stddev      | 0.0347   |
-| reference_Q_mean        | 22.7     |
-| reference_Q_std         | 26.1     |
-| reference_action_mean   | 0.496    |
-| reference_action_std    | 0.761    |
-| reference_actor_Q_mean  | 24.2     |
-| reference_actor_Q_std   | 28.2     |
-| reference_perturbed_... | 0.798    |
-| rollout/Q_mean          | 18.3     |
-| rollout/actions_mean    | 0.31     |
-| rollout/actions_std     | 0.715    |
-| rollout/episode_steps   | 109      |
-| rollout/episodes        | 239      |
-| rollout/return          | 29.4     |
-| rollout/return_history  | 31.2     |
-| total/duration          | 331      |
-| total/episodes          | 239      |
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 5.53     |
+| param_noise_stddev      | 0.0191   |
+| reference_Q_mean        | 7.26     |
+| reference_Q_std         | 11.2     |
+| reference_action_mean   | -0.296   |
+| reference_action_std    | 0.894    |
+| reference_actor_Q_mean  | 7.98     |
+| reference_actor_Q_std   | 12       |
+| reference_perturbed_... | 0.883    |
+| rollout/Q_mean          | 7.68     |
+| rollout/actions_mean    | -0.11    |
+| rollout/actions_std     | 0.799    |
+| rollout/episode_steps   | 77.2     |
+| rollout/episodes        | 336      |
+| rollout/return          | 7.92     |
+| rollout/return_history  | 7.86     |
+| total/duration          | 364      |
+| total/episodes          | 336      |
 | total/epochs            | 13       |
 | total/steps             | 26000    |
-| total/steps_per_second  | 78.7     |
-| train/loss_actor        | -25.5    |
-| train/loss_critic       | 63.9     |
-| train/param_noise_di... | 0.243    |
+| total/steps_per_second  | 71.4     |
+| train/loss_actor        | -10.2    |
+| train/loss_critic       | 3.05     |
+| train/param_noise_di... | 0.435    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 1.69     |
-| eval/return_history     | 13.4     |
-| param_noise_stddev      | 0.034    |
-| reference_Q_mean        | 23.6     |
-| reference_Q_std         | 28.8     |
-| reference_action_mean   | 0.348    |
-| reference_action_std    | 0.892    |
-| reference_actor_Q_mean  | 25.1     |
-| reference_actor_Q_std   | 31.2     |
-| reference_perturbed_... | 0.883    |
-| rollout/Q_mean          | 19.1     |
-| rollout/actions_mean    | 0.32     |
-| rollout/actions_std     | 0.719    |
-| rollout/episode_steps   | 108      |
-| rollout/episodes        | 258      |
-| rollout/return          | 30       |
-| rollout/return_history  | 32.5     |
-| total/duration          | 359      |
-| total/episodes          | 258      |
+| eval/return             | 0        |
+| eval/return_history     | 4.21     |
+| param_noise_stddev      | 0.0157   |
+| reference_Q_mean        | 8.14     |
+| reference_Q_std         | 10.4     |
+| reference_action_mean   | -0.302   |
+| reference_action_std    | 0.911    |
+| reference_actor_Q_mean  | 8.84     |
+| reference_actor_Q_std   | 11       |
+| reference_perturbed_... | 0.909    |
+| rollout/Q_mean          | 7.95     |
+| rollout/actions_mean    | -0.105   |
+| rollout/actions_std     | 0.806    |
+| rollout/episode_steps   | 77.6     |
+| rollout/episodes        | 361      |
+| rollout/return          | 7.72     |
+| rollout/return_history  | 7.53     |
+| total/duration          | 397      |
+| total/episodes          | 361      |
 | total/epochs            | 14       |
 | total/steps             | 28000    |
-| total/steps_per_second  | 78.1     |
-| train/loss_actor        | -25.6    |
-| train/loss_critic       | 35.2     |
-| train/param_noise_di... | 0.209    |
+| total/steps_per_second  | 70.6     |
+| train/loss_actor        | -9.87    |
+| train/loss_critic       | 2.19     |
+| train/param_noise_di... | 0.352    |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 16.1     |
-| param_noise_stddev      | 0.0327   |
-| reference_Q_mean        | 22.8     |
-| reference_Q_std         | 28.2     |
-| reference_action_mean   | 0.363    |
-| reference_action_std    | 0.883    |
-| reference_actor_Q_mean  | 23.8     |
-| reference_actor_Q_std   | 29.5     |
-| reference_perturbed_... | 0.895    |
-| rollout/Q_mean          | 20.5     |
-| rollout/actions_mean    | 0.326    |
-| rollout/actions_std     | 0.72     |
-| rollout/episode_steps   | 108      |
-| rollout/episodes        | 276      |
-| rollout/return          | 30.4     |
-| rollout/return_history  | 35.1     |
-| total/duration          | 387      |
-| total/episodes          | 276      |
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 0.79     |
+| param_noise_stddev      | 0.0128   |
+| reference_Q_mean        | 8.3      |
+| reference_Q_std         | 8.92     |
+| reference_action_mean   | -0.266   |
+| reference_action_std    | 0.921    |
+| reference_actor_Q_mean  | 8.93     |
+| reference_actor_Q_std   | 9.36     |
+| reference_perturbed_... | 0.923    |
+| rollout/Q_mean          | 8.24     |
+| rollout/actions_mean    | -0.108   |
+| rollout/actions_std     | 0.811    |
+| rollout/episode_steps   | 77.7     |
+| rollout/episodes        | 386      |
+| rollout/return          | 7.61     |
+| rollout/return_history  | 7.34     |
+| total/duration          | 430      |
+| total/episodes          | 386      |
 | total/epochs            | 15       |
 | total/steps             | 30000    |
-| total/steps_per_second  | 77.5     |
-| train/loss_actor        | -27.9    |
-| train/loss_critic       | 41.1     |
-| train/param_noise_di... | 0.255    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 3        |
-| eval/return             | 20.6     |
-| eval/return_history     | 19       |
-| param_noise_stddev      | 0.0296   |
-| reference_Q_mean        | 23       |
-| reference_Q_std         | 28.4     |
-| reference_action_mean   | 0.332    |
-| reference_action_std    | 0.919    |
-| reference_actor_Q_mean  | 24.3     |
-| reference_actor_Q_std   | 30.4     |
-| reference_perturbed_... | 0.89     |
-| rollout/Q_mean          | 20.7     |
-| rollout/actions_mean    | 0.333    |
-| rollout/actions_std     | 0.724    |
-| rollout/episode_steps   | 111      |
-| rollout/episodes        | 286      |
-| rollout/return          | 30.6     |
-| rollout/return_history  | 36.9     |
-| total/duration          | 414      |
-| total/episodes          | 286      |
-| total/epochs            | 16       |
-| total/steps             | 32000    |
-| total/steps_per_second  | 77.2     |
-| train/loss_actor        | -27.3    |
-| train/loss_critic       | 37.3     |
-| train/param_noise_di... | 0.246    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 76       |
-| eval/return_history     | 20.4     |
-| param_noise_stddev      | 0.029    |
-| reference_Q_mean        | 24.9     |
-| reference_Q_std         | 28       |
-| reference_action_mean   | 0.338    |
-| reference_action_std    | 0.911    |
-| reference_actor_Q_mean  | 26.1     |
-| reference_actor_Q_std   | 29.8     |
-| reference_perturbed_... | 0.911    |
-| rollout/Q_mean          | 22       |
-| rollout/actions_mean    | 0.335    |
-| rollout/actions_std     | 0.73     |
-| rollout/episode_steps   | 110      |
-| rollout/episodes        | 309      |
-| rollout/return          | 31.8     |
-| rollout/return_history  | 41.9     |
-| total/duration          | 442      |
-| total/episodes          | 309      |
-| total/epochs            | 17       |
-| total/steps             | 34000    |
-| total/steps_per_second  | 76.9     |
-| train/loss_actor        | -28.3    |
-| train/loss_critic       | 51.3     |
-| train/param_noise_di... | 0.207    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 1.6      |
-| eval/return_history     | 22.5     |
-| param_noise_stddev      | 0.0243   |
-| reference_Q_mean        | 24.9     |
-| reference_Q_std         | 29.8     |
-| reference_action_mean   | 0.285    |
-| reference_action_std    | 0.889    |
-| reference_actor_Q_mean  | 25.9     |
-| reference_actor_Q_std   | 31.1     |
-| reference_perturbed_... | 0.877    |
-| rollout/Q_mean          | 22.9     |
-| rollout/actions_mean    | 0.336    |
-| rollout/actions_std     | 0.736    |
-| rollout/episode_steps   | 110      |
-| rollout/episodes        | 325      |
-| rollout/return          | 32.1     |
-| rollout/return_history  | 40.6     |
-| total/duration          | 470      |
-| total/episodes          | 325      |
-| total/epochs            | 18       |
-| total/steps             | 36000    |
-| total/steps_per_second  | 76.5     |
-| train/loss_actor        | -28      |
-| train/loss_critic       | 30.5     |
-| train/param_noise_di... | 0.334    |
+| total/steps_per_second  | 69.7     |
+| train/loss_actor        | -9.78    |
+| train/loss_critic       | 2.3      |
+| train/param_noise_di... | 0.291    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 2        |
-| eval/return             | 45.2     |
-| eval/return_history     | 20.4     |
-| param_noise_stddev      | 0.0199   |
-| reference_Q_mean        | 25.2     |
-| reference_Q_std         | 29.8     |
-| reference_action_mean   | 0.0891   |
-| reference_action_std    | 0.952    |
-| reference_actor_Q_mean  | 26.3     |
-| reference_actor_Q_std   | 31.1     |
-| reference_perturbed_... | 0.955    |
-| rollout/Q_mean          | 23.6     |
-| rollout/actions_mean    | 0.334    |
-| rollout/actions_std     | 0.741    |
-| rollout/episode_steps   | 111      |
-| rollout/episodes        | 343      |
-| rollout/return          | 32.2     |
-| rollout/return_history  | 38.8     |
-| total/duration          | 499      |
-| total/episodes          | 343      |
-| total/epochs            | 19       |
-| total/steps             | 38000    |
-| total/steps_per_second  | 76.1     |
-| train/loss_actor        | -31      |
-| train/loss_critic       | 47.9     |
-| train/param_noise_di... | 0.288    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 0.59     |
-| eval/return_history     | 18.8     |
-| param_noise_stddev      | 0.017    |
-| reference_Q_mean        | 25.3     |
-| reference_Q_std         | 30.7     |
-| reference_action_mean   | 0.129    |
-| reference_action_std    | 0.953    |
-| reference_actor_Q_mean  | 26.3     |
-| reference_actor_Q_std   | 32.1     |
-| reference_perturbed_... | 0.937    |
-| rollout/Q_mean          | 24.9     |
-| rollout/actions_mean    | 0.33     |
-| rollout/actions_std     | 0.747    |
-| rollout/episode_steps   | 111      |
-| rollout/episodes        | 360      |
-| rollout/return          | 33       |
-| rollout/return_history  | 41.1     |
-| total/duration          | 529      |
-| total/episodes          | 360      |
-| total/epochs            | 20       |
-| total/steps             | 40000    |
-| total/steps_per_second  | 75.6     |
-| train/loss_actor        | -31.6    |
-| train/loss_critic       | 37.3     |
-| train/param_noise_di... | 0.311    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
 | eval/return             | 0        |
-| eval/return_history     | 17.7     |
-| param_noise_stddev      | 0.0154   |
-| reference_Q_mean        | 25.2     |
-| reference_Q_std         | 30.2     |
-| reference_action_mean   | 0.307    |
-| reference_action_std    | 0.863    |
-| reference_actor_Q_mean  | 26.1     |
-| reference_actor_Q_std   | 31.7     |
-| reference_perturbed_... | 0.866    |
-| rollout/Q_mean          | 25.5     |
-| rollout/actions_mean    | 0.33     |
-| rollout/actions_std     | 0.752    |
-| rollout/episode_steps   | 112      |
-| rollout/episodes        | 373      |
-| rollout/return          | 32.7     |
-| rollout/return_history  | 39.1     |
-| total/duration          | 560      |
-| total/episodes          | 373      |
-| total/epochs            | 21       |
-| total/steps             | 42000    |
-| total/steps_per_second  | 75.1     |
-| train/loss_actor        | -32.1    |
-| train/loss_critic       | 29.5     |
-| train/param_noise_di... | 0.173    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 10       |
-| eval/return_history     | 14.9     |
-| param_noise_stddev      | 0.0136   |
-| reference_Q_mean        | 24.9     |
-| reference_Q_std         | 31.9     |
-| reference_action_mean   | 0.345    |
-| reference_action_std    | 0.87     |
-| reference_actor_Q_mean  | 25.7     |
-| reference_actor_Q_std   | 32.7     |
-| reference_perturbed_... | 0.868    |
-| rollout/Q_mean          | 25.7     |
-| rollout/actions_mean    | 0.33     |
-| rollout/actions_std     | 0.756    |
-| rollout/episode_steps   | 114      |
-| rollout/episodes        | 387      |
-| rollout/return          | 32.9     |
-| rollout/return_history  | 39.7     |
-| total/duration          | 590      |
-| total/episodes          | 387      |
-| total/epochs            | 22       |
-| total/steps             | 44000    |
-| total/steps_per_second  | 74.6     |
-| train/loss_actor        | -31      |
-| train/loss_critic       | 38.7     |
-| train/param_noise_di... | 0.318    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 26.6     |
-| eval/return_history     | 13.2     |
-| param_noise_stddev      | 0.0126   |
-| reference_Q_mean        | 25.8     |
-| reference_Q_std         | 33.4     |
-| reference_action_mean   | 0.536    |
-| reference_action_std    | 0.742    |
-| reference_actor_Q_mean  | 26.8     |
-| reference_actor_Q_std   | 34.5     |
-| reference_perturbed_... | 0.758    |
-| rollout/Q_mean          | 26.6     |
-| rollout/actions_mean    | 0.338    |
-| rollout/actions_std     | 0.756    |
-| rollout/episode_steps   | 114      |
-| rollout/episodes        | 402      |
-| rollout/return          | 32.9     |
-| rollout/return_history  | 37.3     |
-| total/duration          | 620      |
-| total/episodes          | 402      |
-| total/epochs            | 23       |
-| total/steps             | 46000    |
-| total/steps_per_second  | 74.2     |
-| train/loss_actor        | -33.1    |
-| train/loss_critic       | 50       |
-| train/param_noise_di... | 0.181    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 11.7     |
-| param_noise_stddev      | 0.0114   |
-| reference_Q_mean        | 25.1     |
-| reference_Q_std         | 33.7     |
-| reference_action_mean   | 0.421    |
-| reference_action_std    | 0.767    |
-| reference_actor_Q_mean  | 26.2     |
-| reference_actor_Q_std   | 35       |
-| reference_perturbed_... | 0.804    |
-| rollout/Q_mean          | 26.9     |
-| rollout/actions_mean    | 0.343    |
-| rollout/actions_std     | 0.757    |
-| rollout/episode_steps   | 116      |
-| rollout/episodes        | 415      |
-| rollout/return          | 32.7     |
-| rollout/return_history  | 35.1     |
-| total/duration          | 651      |
-| total/episodes          | 415      |
-| total/epochs            | 24       |
-| total/steps             | 48000    |
-| total/steps_per_second  | 73.8     |
-| train/loss_actor        | -32.7    |
-| train/loss_critic       | 48.4     |
-| train/param_noise_di... | 0.215    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 10.1     |
-| param_noise_stddev      | 0.0114   |
-| reference_Q_mean        | 24.1     |
-| reference_Q_std         | 32.6     |
-| reference_action_mean   | 0.511    |
-| reference_action_std    | 0.764    |
-| reference_actor_Q_mean  | 25.1     |
-| reference_actor_Q_std   | 34       |
-| reference_perturbed_... | 0.761    |
-| rollout/Q_mean          | 27.4     |
-| rollout/actions_mean    | 0.348    |
-| rollout/actions_std     | 0.759    |
-| rollout/episode_steps   | 116      |
-| rollout/episodes        | 429      |
-| rollout/return          | 32.8     |
-| rollout/return_history  | 35       |
-| total/duration          | 681      |
-| total/episodes          | 429      |
-| total/epochs            | 25       |
-| total/steps             | 50000    |
-| total/steps_per_second  | 73.4     |
-| train/loss_actor        | -32.5    |
-| train/loss_critic       | 44.8     |
-| train/param_noise_di... | 0.233    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 7.95     |
-| param_noise_stddev      | 0.0109   |
-| reference_Q_mean        | 23.7     |
-| reference_Q_std         | 32       |
-| reference_action_mean   | 0.187    |
-| reference_action_std    | 0.906    |
-| reference_actor_Q_mean  | 24.6     |
-| reference_actor_Q_std   | 33.3     |
-| reference_perturbed_... | 0.896    |
-| rollout/Q_mean          | 27.8     |
-| rollout/actions_mean    | 0.346    |
-| rollout/actions_std     | 0.763    |
-| rollout/episode_steps   | 117      |
-| rollout/episodes        | 443      |
-| rollout/return          | 33.1     |
-| rollout/return_history  | 36.3     |
-| total/duration          | 712      |
-| total/episodes          | 443      |
-| total/epochs            | 26       |
-| total/steps             | 52000    |
-| total/steps_per_second  | 73       |
-| train/loss_actor        | -32.2    |
-| train/loss_critic       | 46.6     |
+| eval/return_history     | 0.88     |
+| param_noise_stddev      | 0.0112   |
+| reference_Q_mean        | 7.94     |
+| reference_Q_std         | 7.97     |
+| reference_action_mean   | -0.276   |
+| reference_action_std    | 0.907    |
+| reference_actor_Q_mean  | 8.19     |
+| reference_actor_Q_std   | 8.24     |
+| reference_perturbed_... | 0.919    |
+| rollout/Q_mean          | 8.4      |
+| rollout/actions_mean    | -0.114   |
+| rollout/actions_std     | 0.816    |
+| rollout/episode_steps   | 78       |
+| rollout/episodes        | 410      |
+| rollout/return          | 7.3      |
+| rollout/return_history  | 6.28     |
+| total/duration          | 464      |
+| total/episodes          | 410      |
+| total/epochs            | 16       |
+| total/steps             | 32000    |
+| total/steps_per_second  | 68.9     |
+| train/loss_actor        | -8.6     |
+| train/loss_critic       | 1.37     |
 | train/param_noise_di... | 0.307    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 0.00634  |
-| eval/return_history     | 8.73     |
-| param_noise_stddev      | 0.0109   |
-| reference_Q_mean        | 23.6     |
-| reference_Q_std         | 33.8     |
-| reference_action_mean   | 0.219    |
-| reference_action_std    | 0.901    |
-| reference_actor_Q_mean  | 24.4     |
-| reference_actor_Q_std   | 35       |
-| reference_perturbed_... | 0.857    |
-| rollout/Q_mean          | 28       |
-| rollout/actions_mean    | 0.346    |
-| rollout/actions_std     | 0.766    |
-| rollout/episode_steps   | 118      |
-| rollout/episodes        | 458      |
-| rollout/return          | 33.2     |
-| rollout/return_history  | 33.7     |
-| total/duration          | 743      |
-| total/episodes          | 458      |
-| total/epochs            | 27       |
-| total/steps             | 54000    |
-| total/steps_per_second  | 72.7     |
-| train/loss_actor        | -29.2    |
-| train/loss_critic       | 37.2     |
-| train/param_noise_di... | 0.141    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 9.22     |
-| param_noise_stddev      | 0.0101   |
-| reference_Q_mean        | 22.1     |
-| reference_Q_std         | 30.1     |
-| reference_action_mean   | 0.267    |
-| reference_action_std    | 0.898    |
-| reference_actor_Q_mean  | 23.3     |
-| reference_actor_Q_std   | 31.8     |
-| reference_perturbed_... | 0.895    |
-| rollout/Q_mean          | 28.4     |
-| rollout/actions_mean    | 0.345    |
-| rollout/actions_std     | 0.769    |
-| rollout/episode_steps   | 118      |
-| rollout/episodes        | 474      |
-| rollout/return          | 33.3     |
-| rollout/return_history  | 35.5     |
-| total/duration          | 775      |
-| total/episodes          | 474      |
-| total/epochs            | 28       |
-| total/steps             | 56000    |
-| total/steps_per_second  | 72.3     |
-| train/loss_actor        | -31.6    |
-| train/loss_critic       | 47       |
-| train/param_noise_di... | 0.47     |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 0.183    |
-| eval/return_history     | 9.42     |
-| param_noise_stddev      | 0.0105   |
-| reference_Q_mean        | 23.5     |
-| reference_Q_std         | 33.7     |
-| reference_action_mean   | 0.365    |
-| reference_action_std    | 0.857    |
-| reference_actor_Q_mean  | 24.7     |
-| reference_actor_Q_std   | 35.6     |
-| reference_perturbed_... | 0.855    |
-| rollout/Q_mean          | 28.5     |
-| rollout/actions_mean    | 0.347    |
-| rollout/actions_std     | 0.771    |
-| rollout/episode_steps   | 118      |
-| rollout/episodes        | 490      |
-| rollout/return          | 33.3     |
-| rollout/return_history  | 35.1     |
-| total/duration          | 807      |
-| total/episodes          | 490      |
-| total/epochs            | 29       |
-| total/steps             | 58000    |
-| total/steps_per_second  | 71.9     |
-| train/loss_actor        | -30      |
-| train/loss_critic       | 32.3     |
-| train/param_noise_di... | 0.499    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 39.7     |
-| eval/return_history     | 13.4     |
-| param_noise_stddev      | 0.0101   |
-| reference_Q_mean        | 22.9     |
-| reference_Q_std         | 33.1     |
-| reference_action_mean   | 0.247    |
-| reference_action_std    | 0.883    |
-| reference_actor_Q_mean  | 23.6     |
-| reference_actor_Q_std   | 34.3     |
-| reference_perturbed_... | 0.898    |
-| rollout/Q_mean          | 28.8     |
-| rollout/actions_mean    | 0.347    |
-| rollout/actions_std     | 0.773    |
-| rollout/episode_steps   | 117      |
-| rollout/episodes        | 512      |
-| rollout/return          | 33.8     |
-| rollout/return_history  | 38.2     |
-| total/duration          | 837      |
-| total/episodes          | 512      |
-| total/epochs            | 30       |
-| total/steps             | 60000    |
-| total/steps_per_second  | 71.7     |
-| train/loss_actor        | -30.7    |
-| train/loss_critic       | 35.6     |
-| train/param_noise_di... | 0.269    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 2        |
-| eval/return             | 13.5     |
-| eval/return_history     | 15.4     |
-| param_noise_stddev      | 0.0107   |
-| reference_Q_mean        | 22.8     |
-| reference_Q_std         | 32.6     |
-| reference_action_mean   | 0.18     |
-| reference_action_std    | 0.924    |
-| reference_actor_Q_mean  | 23.9     |
-| reference_actor_Q_std   | 34.3     |
-| reference_perturbed_... | 0.931    |
-| rollout/Q_mean          | 29.1     |
-| rollout/actions_mean    | 0.345    |
-| rollout/actions_std     | 0.778    |
-| rollout/episode_steps   | 117      |
-| rollout/episodes        | 531      |
-| rollout/return          | 34       |
-| rollout/return_history  | 38.7     |
-| total/duration          | 870      |
-| total/episodes          | 531      |
-| total/epochs            | 31       |
-| total/steps             | 62000    |
-| total/steps_per_second  | 71.3     |
-| train/loss_actor        | -29.3    |
-| train/loss_critic       | 36.5     |
-| train/param_noise_di... | 0.139    |
+| eval/return             | 0        |
+| eval/return_history     | 0.43     |
+| param_noise_stddev      | 0.00991  |
+| reference_Q_mean        | 7.15     |
+| reference_Q_std         | 7.75     |
+| reference_action_mean   | -0.26    |
+| reference_action_std    | 0.912    |
+| reference_actor_Q_mean  | 7.55     |
+| reference_actor_Q_std   | 8.22     |
+| reference_perturbed_... | 0.929    |
+| rollout/Q_mean          | 8.44     |
+| rollout/actions_mean    | -0.121   |
+| rollout/actions_std     | 0.82     |
+| rollout/episode_steps   | 78.2     |
+| rollout/episodes        | 434      |
+| rollout/return          | 7.28     |
+| rollout/return_history  | 5.54     |
+| total/duration          | 499      |
+| total/episodes          | 434      |
+| total/epochs            | 17       |
+| total/steps             | 34000    |
+| total/steps_per_second  | 68.1     |
+| train/loss_actor        | -8.12    |
+| train/loss_critic       | 1.33     |
+| train/param_noise_di... | 0.439    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
 | eval/return             | 0        |
-| eval/return_history     | 15.5     |
-| param_noise_stddev      | 0.0105   |
-| reference_Q_mean        | 21.8     |
-| reference_Q_std         | 31.9     |
-| reference_action_mean   | 0.155    |
-| reference_action_std    | 0.946    |
-| reference_actor_Q_mean  | 22.9     |
-| reference_actor_Q_std   | 33.7     |
-| reference_perturbed_... | 0.939    |
-| rollout/Q_mean          | 29       |
-| rollout/actions_mean    | 0.338    |
-| rollout/actions_std     | 0.784    |
-| rollout/episode_steps   | 117      |
-| rollout/episodes        | 544      |
-| rollout/return          | 34.1     |
-| rollout/return_history  | 38.3     |
-| total/duration          | 903      |
-| total/episodes          | 544      |
-| total/epochs            | 32       |
-| total/steps             | 64000    |
-| total/steps_per_second  | 70.9     |
-| train/loss_actor        | -29.5    |
-| train/loss_critic       | 35.4     |
+| eval/return_history     | 1.54     |
+| param_noise_stddev      | 0.00828  |
+| reference_Q_mean        | 6.63     |
+| reference_Q_std         | 7.16     |
+| reference_action_mean   | -0.218   |
+| reference_action_std    | 0.919    |
+| reference_actor_Q_mean  | 6.94     |
+| reference_actor_Q_std   | 7.47     |
+| reference_perturbed_... | 0.912    |
+| rollout/Q_mean          | 8.61     |
+| rollout/actions_mean    | -0.121   |
+| rollout/actions_std     | 0.822    |
+| rollout/episode_steps   | 78.2     |
+| rollout/episodes        | 460      |
+| rollout/return          | 7.3      |
+| rollout/return_history  | 5.79     |
+| total/duration          | 534      |
+| total/episodes          | 460      |
+| total/epochs            | 18       |
+| total/steps             | 36000    |
+| total/steps_per_second  | 67.4     |
+| train/loss_actor        | -7.83    |
+| train/loss_critic       | 1.87     |
 | train/param_noise_di... | 0.236    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 2.54     |
-| eval/return_history     | 15.5     |
-| param_noise_stddev      | 0.0103   |
-| reference_Q_mean        | 22.4     |
-| reference_Q_std         | 33.8     |
-| reference_action_mean   | 0.245    |
-| reference_action_std    | 0.929    |
-| reference_actor_Q_mean  | 23.9     |
-| reference_actor_Q_std   | 35.7     |
-| reference_perturbed_... | 0.913    |
-| rollout/Q_mean          | 29.3     |
-| rollout/actions_mean    | 0.335    |
-| rollout/actions_std     | 0.787    |
-| rollout/episode_steps   | 117      |
-| rollout/episodes        | 566      |
-| rollout/return          | 34.1     |
-| rollout/return_history  | 38.9     |
-| total/duration          | 935      |
-| total/episodes          | 566      |
-| total/epochs            | 33       |
-| total/steps             | 66000    |
-| total/steps_per_second  | 70.6     |
-| train/loss_actor        | -29.3    |
-| train/loss_critic       | 39.3     |
-| train/param_noise_di... | 0.164    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 4.57e-08 |
-| eval/return_history     | 14.5     |
-| param_noise_stddev      | 0.0112   |
-| reference_Q_mean        | 22.3     |
-| reference_Q_std         | 32.7     |
-| reference_action_mean   | 0.265    |
-| reference_action_std    | 0.906    |
-| reference_actor_Q_mean  | 23.8     |
-| reference_actor_Q_std   | 34.8     |
-| reference_perturbed_... | 0.928    |
-| rollout/Q_mean          | 29.6     |
-| rollout/actions_mean    | 0.333    |
-| rollout/actions_std     | 0.791    |
-| rollout/episode_steps   | 116      |
-| rollout/episodes        | 586      |
-| rollout/return          | 34.2     |
-| rollout/return_history  | 38.6     |
-| total/duration          | 969      |
-| total/episodes          | 586      |
-| total/epochs            | 34       |
-| total/steps             | 68000    |
-| total/steps_per_second  | 70.2     |
-| train/loss_actor        | -31      |
-| train/loss_critic       | 44.9     |
-| train/param_noise_di... | 0.127    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 0.0698   |
-| eval/return_history     | 13.6     |
-| param_noise_stddev      | 0.0107   |
-| reference_Q_mean        | 23.4     |
-| reference_Q_std         | 34.6     |
-| reference_action_mean   | 0.214    |
-| reference_action_std    | 0.909    |
-| reference_actor_Q_mean  | 24.4     |
-| reference_actor_Q_std   | 36.2     |
-| reference_perturbed_... | 0.924    |
-| rollout/Q_mean          | 30       |
-| rollout/actions_mean    | 0.331    |
-| rollout/actions_std     | 0.794    |
-| rollout/episode_steps   | 116      |
-| rollout/episodes        | 604      |
-| rollout/return          | 34.4     |
-| rollout/return_history  | 37       |
-| total/duration          | 1e+03    |
-| total/episodes          | 604      |
-| total/epochs            | 35       |
-| total/steps             | 70000    |
-| total/steps_per_second  | 69.8     |
-| train/loss_actor        | -29.8    |
-| train/loss_critic       | 45.5     |
-| train/param_noise_di... | 0.114    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 13.3     |
-| param_noise_stddev      | 0.00991  |
-| reference_Q_mean        | 22.8     |
-| reference_Q_std         | 33.9     |
-| reference_action_mean   | 0.167    |
-| reference_action_std    | 0.893    |
-| reference_actor_Q_mean  | 23.8     |
-| reference_actor_Q_std   | 35.6     |
-| reference_perturbed_... | 0.899    |
-| rollout/Q_mean          | 30.3     |
-| rollout/actions_mean    | 0.326    |
-| rollout/actions_std     | 0.797    |
-| rollout/episode_steps   | 115      |
-| rollout/episodes        | 625      |
-| rollout/return          | 34.2     |
-| rollout/return_history  | 34.5     |
-| total/duration          | 1.04e+03 |
-| total/episodes          | 625      |
-| total/epochs            | 36       |
-| total/steps             | 72000    |
-| total/steps_per_second  | 69.4     |
-| train/loss_actor        | -32.5    |
-| train/loss_critic       | 51.1     |
+| eval/return             | 0        |
+| eval/return_history     | 3.41     |
+| param_noise_stddev      | 0.00735  |
+| reference_Q_mean        | 6.45     |
+| reference_Q_std         | 7.43     |
+| reference_action_mean   | -0.308   |
+| reference_action_std    | 0.862    |
+| reference_actor_Q_mean  | 6.73     |
+| reference_actor_Q_std   | 7.77     |
+| reference_perturbed_... | 0.865    |
+| rollout/Q_mean          | 8.69     |
+| rollout/actions_mean    | -0.12    |
+| rollout/actions_std     | 0.825    |
+| rollout/episode_steps   | 78.5     |
+| rollout/episodes        | 484      |
+| rollout/return          | 7.52     |
+| rollout/return_history  | 7.03     |
+| total/duration          | 570      |
+| total/episodes          | 484      |
+| total/epochs            | 19       |
+| total/steps             | 38000    |
+| total/steps_per_second  | 66.7     |
+| train/loss_actor        | -8.3     |
+| train/loss_critic       | 1.83     |
 | train/param_noise_di... | 0.232    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 14.4     |
-| param_noise_stddev      | 0.00991  |
-| reference_Q_mean        | 22       |
-| reference_Q_std         | 33.1     |
-| reference_action_mean   | 0.165    |
-| reference_action_std    | 0.92     |
-| reference_actor_Q_mean  | 23       |
-| reference_actor_Q_std   | 34.7     |
-| reference_perturbed_... | 0.938    |
-| rollout/Q_mean          | 30.7     |
-| rollout/actions_mean    | 0.321    |
-| rollout/actions_std     | 0.8      |
-| rollout/episode_steps   | 114      |
-| rollout/episodes        | 645      |
-| rollout/return          | 34.5     |
-| rollout/return_history  | 37       |
-| total/duration          | 1.07e+03 |
-| total/episodes          | 645      |
-| total/epochs            | 37       |
-| total/steps             | 74000    |
-| total/steps_per_second  | 69       |
-| train/loss_actor        | -31.1    |
-| train/loss_critic       | 65.9     |
-| train/param_noise_di... | 0.192    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 21.6     |
-| eval/return_history     | 13       |
-| param_noise_stddev      | 0.0103   |
-| reference_Q_mean        | 23.4     |
-| reference_Q_std         | 36.3     |
-| reference_action_mean   | 0.28     |
-| reference_action_std    | 0.921    |
-| reference_actor_Q_mean  | 24.6     |
-| reference_actor_Q_std   | 38.6     |
-| reference_perturbed_... | 0.929    |
-| rollout/Q_mean          | 30.8     |
-| rollout/actions_mean    | 0.319    |
-| rollout/actions_std     | 0.803    |
-| rollout/episode_steps   | 115      |
-| rollout/episodes        | 661      |
-| rollout/return          | 34.3     |
-| rollout/return_history  | 35.8     |
-| total/duration          | 1.11e+03 |
-| total/episodes          | 661      |
-| total/epochs            | 38       |
-| total/steps             | 76000    |
-| total/steps_per_second  | 68.6     |
-| train/loss_actor        | -30.5    |
-| train/loss_critic       | 54.3     |
-| train/param_noise_di... | 0.125    |
---------------------------------------
-
---------------------------------------
-| eval/episodes           | 2        |
-| eval/return             | 13.5     |
-| eval/return_history     | 12       |
-| param_noise_stddev      | 0.0105   |
-| reference_Q_mean        | 24.2     |
-| reference_Q_std         | 39.1     |
-| reference_action_mean   | 0.178    |
-| reference_action_std    | 0.933    |
-| reference_actor_Q_mean  | 25.2     |
-| reference_actor_Q_std   | 40       |
-| reference_perturbed_... | 0.928    |
-| rollout/Q_mean          | 30.9     |
-| rollout/actions_mean    | 0.316    |
-| rollout/actions_std     | 0.807    |
-| rollout/episode_steps   | 115      |
-| rollout/episodes        | 679      |
-| rollout/return          | 34.4     |
-| rollout/return_history  | 36       |
-| total/duration          | 1.14e+03 |
-| total/episodes          | 679      |
-| total/epochs            | 39       |
-| total/steps             | 78000    |
-| total/steps_per_second  | 68.3     |
-| train/loss_actor        | -31      |
-| train/loss_critic       | 67.3     |
-| train/param_noise_di... | 0.162    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
 | eval/return             | 0        |
-| eval/return_history     | 13.8     |
-| param_noise_stddev      | 0.00933  |
-| reference_Q_mean        | 24.3     |
-| reference_Q_std         | 38.3     |
-| reference_action_mean   | 0.136    |
-| reference_action_std    | 0.935    |
-| reference_actor_Q_mean  | 25.1     |
-| reference_actor_Q_std   | 39.6     |
-| reference_perturbed_... | 0.938    |
-| rollout/Q_mean          | 31.2     |
-| rollout/actions_mean    | 0.307    |
-| rollout/actions_std     | 0.812    |
-| rollout/episode_steps   | 112      |
-| rollout/episodes        | 711      |
-| rollout/return          | 34.4     |
-| rollout/return_history  | 35.2     |
-| total/duration          | 1.18e+03 |
-| total/episodes          | 711      |
+| eval/return_history     | 7.86     |
+| param_noise_stddev      | 0.00706  |
+| reference_Q_mean        | 6.04     |
+| reference_Q_std         | 7.37     |
+| reference_action_mean   | -0.168   |
+| reference_action_std    | 0.932    |
+| reference_actor_Q_mean  | 6.32     |
+| reference_actor_Q_std   | 7.8      |
+| reference_perturbed_... | 0.912    |
+| rollout/Q_mean          | 8.89     |
+| rollout/actions_mean    | -0.123   |
+| rollout/actions_std     | 0.827    |
+| rollout/episode_steps   | 78.7     |
+| rollout/episodes        | 508      |
+| rollout/return          | 8.34     |
+| rollout/return_history  | 12.4     |
+| total/duration          | 607      |
+| total/episodes          | 508      |
+| total/epochs            | 20       |
+| total/steps             | 40000    |
+| total/steps_per_second  | 66       |
+| train/loss_actor        | -8.67    |
+| train/loss_critic       | 2.2      |
+| train/param_noise_di... | 0.163    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 9.12     |
+| param_noise_stddev      | 0.0078   |
+| reference_Q_mean        | 6.06     |
+| reference_Q_std         | 7.93     |
+| reference_action_mean   | -0.0489  |
+| reference_action_std    | 0.924    |
+| reference_actor_Q_mean  | 6.48     |
+| reference_actor_Q_std   | 8.53     |
+| reference_perturbed_... | 0.917    |
+| rollout/Q_mean          | 8.95     |
+| rollout/actions_mean    | -0.122   |
+| rollout/actions_std     | 0.828    |
+| rollout/episode_steps   | 78.9     |
+| rollout/episodes        | 531      |
+| rollout/return          | 8.54     |
+| rollout/return_history  | 13.8     |
+| total/duration          | 645      |
+| total/episodes          | 531      |
+| total/epochs            | 21       |
+| total/steps             | 42000    |
+| total/steps_per_second  | 65.1     |
+| train/loss_actor        | -9.35    |
+| train/loss_critic       | 1.88     |
+| train/param_noise_di... | 0.187    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 9.54     |
+| param_noise_stddev      | 0.00765  |
+| reference_Q_mean        | 6.12     |
+| reference_Q_std         | 8.51     |
+| reference_action_mean   | -0.0308  |
+| reference_action_std    | 0.912    |
+| reference_actor_Q_mean  | 6.41     |
+| reference_actor_Q_std   | 8.79     |
+| reference_perturbed_... | 0.895    |
+| rollout/Q_mean          | 8.98     |
+| rollout/actions_mean    | -0.116   |
+| rollout/actions_std     | 0.832    |
+| rollout/episode_steps   | 79.2     |
+| rollout/episodes        | 555      |
+| rollout/return          | 8.89     |
+| rollout/return_history  | 16       |
+| total/duration          | 684      |
+| total/episodes          | 555      |
+| total/epochs            | 22       |
+| total/steps             | 44000    |
+| total/steps_per_second  | 64.3     |
+| train/loss_actor        | -9.91    |
+| train/loss_critic       | 2        |
+| train/param_noise_di... | 0.163    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 2        |
+| eval/return             | 17.5     |
+| eval/return_history     | 10.4     |
+| param_noise_stddev      | 0.00796  |
+| reference_Q_mean        | 6.16     |
+| reference_Q_std         | 9.41     |
+| reference_action_mean   | -0.0372  |
+| reference_action_std    | 0.914    |
+| reference_actor_Q_mean  | 6.68     |
+| reference_actor_Q_std   | 10.2     |
+| reference_perturbed_... | 0.913    |
+| rollout/Q_mean          | 9.24     |
+| rollout/actions_mean    | -0.113   |
+| rollout/actions_std     | 0.834    |
+| rollout/episode_steps   | 79.3     |
+| rollout/episodes        | 580      |
+| rollout/return          | 9.21     |
+| rollout/return_history  | 17.2     |
+| total/duration          | 723      |
+| total/episodes          | 580      |
+| total/epochs            | 23       |
+| total/steps             | 46000    |
+| total/steps_per_second  | 63.7     |
+| train/loss_actor        | -10.5    |
+| train/loss_critic       | 3.12     |
+| train/param_noise_di... | 0.224    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 2        |
+| eval/return             | 30       |
+| eval/return_history     | 13.2     |
+| param_noise_stddev      | 0.00796  |
+| reference_Q_mean        | 6.28     |
+| reference_Q_std         | 10       |
+| reference_action_mean   | -0.0626  |
+| reference_action_std    | 0.918    |
+| reference_actor_Q_mean  | 6.93     |
+| reference_actor_Q_std   | 11       |
+| reference_perturbed_... | 0.915    |
+| rollout/Q_mean          | 9.73     |
+| rollout/actions_mean    | -0.104   |
+| rollout/actions_std     | 0.838    |
+| rollout/episode_steps   | 79.4     |
+| rollout/episodes        | 604      |
+| rollout/return          | 9.84     |
+| rollout/return_history  | 18.1     |
+| total/duration          | 763      |
+| total/episodes          | 604      |
+| total/epochs            | 24       |
+| total/steps             | 48000    |
+| total/steps_per_second  | 63       |
+| train/loss_actor        | -11.2    |
+| train/loss_critic       | 2.8      |
+| train/param_noise_di... | 0.243    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 2        |
+| eval/return             | 0        |
+| eval/return_history     | 16.6     |
+| param_noise_stddev      | 0.00765  |
+| reference_Q_mean        | 5.81     |
+| reference_Q_std         | 9.46     |
+| reference_action_mean   | -0.108   |
+| reference_action_std    | 0.927    |
+| reference_actor_Q_mean  | 6.3      |
+| reference_actor_Q_std   | 10.1     |
+| reference_perturbed_... | 0.946    |
+| rollout/Q_mean          | 10.1     |
+| rollout/actions_mean    | -0.096   |
+| rollout/actions_std     | 0.84     |
+| rollout/episode_steps   | 79.5     |
+| rollout/episodes        | 628      |
+| rollout/return          | 10.3     |
+| rollout/return_history  | 19.6     |
+| total/duration          | 803      |
+| total/episodes          | 628      |
+| total/epochs            | 25       |
+| total/steps             | 50000    |
+| total/steps_per_second  | 62.3     |
+| train/loss_actor        | -12      |
+| train/loss_critic       | 4.68     |
+| train/param_noise_di... | 0.203    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 20.8     |
+| param_noise_stddev      | 0.00735  |
+| reference_Q_mean        | 5.97     |
+| reference_Q_std         | 9.29     |
+| reference_action_mean   | -0.0786  |
+| reference_action_std    | 0.933    |
+| reference_actor_Q_mean  | 6.3      |
+| reference_actor_Q_std   | 9.56     |
+| reference_perturbed_... | 0.934    |
+| rollout/Q_mean          | 10.3     |
+| rollout/actions_mean    | -0.0895  |
+| rollout/actions_std     | 0.844    |
+| rollout/episode_steps   | 79.7     |
+| rollout/episodes        | 652      |
+| rollout/return          | 11       |
+| rollout/return_history  | 22.6     |
+| total/duration          | 844      |
+| total/episodes          | 652      |
+| total/epochs            | 26       |
+| total/steps             | 52000    |
+| total/steps_per_second  | 61.6     |
+| train/loss_actor        | -11.7    |
+| train/loss_critic       | 3.79     |
+| train/param_noise_di... | 0.231    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 22.9     |
+| param_noise_stddev      | 0.00692  |
+| reference_Q_mean        | 5.35     |
+| reference_Q_std         | 9.58     |
+| reference_action_mean   | 0.0194   |
+| reference_action_std    | 0.904    |
+| reference_actor_Q_mean  | 5.52     |
+| reference_actor_Q_std   | 9.75     |
+| reference_perturbed_... | 0.907    |
+| rollout/Q_mean          | 10.7     |
+| rollout/actions_mean    | -0.081   |
+| rollout/actions_std     | 0.847    |
+| rollout/episode_steps   | 79.9     |
+| rollout/episodes        | 676      |
+| rollout/return          | 12.3     |
+| rollout/return_history  | 30.5     |
+| total/duration          | 886      |
+| total/episodes          | 676      |
+| total/epochs            | 27       |
+| total/steps             | 54000    |
+| total/steps_per_second  | 60.9     |
+| train/loss_actor        | -12.8    |
+| train/loss_critic       | 5.58     |
+| train/param_noise_di... | 0.201    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 43       |
+| eval/return_history     | 23       |
+| param_noise_stddev      | 0.00706  |
+| reference_Q_mean        | 5.35     |
+| reference_Q_std         | 10.3     |
+| reference_action_mean   | -0.174   |
+| reference_action_std    | 0.929    |
+| reference_actor_Q_mean  | 5.8      |
+| reference_actor_Q_std   | 10.8     |
+| reference_perturbed_... | 0.933    |
+| rollout/Q_mean          | 11       |
+| rollout/actions_mean    | -0.0757  |
+| rollout/actions_std     | 0.849    |
+| rollout/episode_steps   | 80       |
+| rollout/episodes        | 700      |
+| rollout/return          | 12.9     |
+| rollout/return_history  | 31.3     |
+| total/duration          | 929      |
+| total/episodes          | 700      |
+| total/epochs            | 28       |
+| total/steps             | 56000    |
+| total/steps_per_second  | 60.3     |
+| train/loss_actor        | -12.9    |
+| train/loss_critic       | 3.99     |
+| train/param_noise_di... | 0.21     |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 8        |
+| eval/return_history     | 21.3     |
+| param_noise_stddev      | 0.00679  |
+| reference_Q_mean        | 5.44     |
+| reference_Q_std         | 10.9     |
+| reference_action_mean   | -0.198   |
+| reference_action_std    | 0.895    |
+| reference_actor_Q_mean  | 5.82     |
+| reference_actor_Q_std   | 11.5     |
+| reference_perturbed_... | 0.899    |
+| rollout/Q_mean          | 11.3     |
+| rollout/actions_mean    | -0.075   |
+| rollout/actions_std     | 0.85     |
+| rollout/episode_steps   | 80.1     |
+| rollout/episodes        | 723      |
+| rollout/return          | 13.4     |
+| rollout/return_history  | 34       |
+| total/duration          | 972      |
+| total/episodes          | 723      |
+| total/epochs            | 29       |
+| total/steps             | 58000    |
+| total/steps_per_second  | 59.7     |
+| train/loss_actor        | -13.3    |
+| train/loss_critic       | 5.5      |
+| train/param_noise_di... | 0.24     |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 20.9     |
+| param_noise_stddev      | 0.00615  |
+| reference_Q_mean        | 5.09     |
+| reference_Q_std         | 11.2     |
+| reference_action_mean   | 0.0015   |
+| reference_action_std    | 0.929    |
+| reference_actor_Q_mean  | 5.68     |
+| reference_actor_Q_std   | 12.2     |
+| reference_perturbed_... | 0.921    |
+| rollout/Q_mean          | 11.7     |
+| rollout/actions_mean    | -0.0738  |
+| rollout/actions_std     | 0.851    |
+| rollout/episode_steps   | 80.2     |
+| rollout/episodes        | 747      |
+| rollout/return          | 13.7     |
+| rollout/return_history  | 32.4     |
+| total/duration          | 1.02e+03 |
+| total/episodes          | 747      |
+| total/epochs            | 30       |
+| total/steps             | 60000    |
+| total/steps_per_second  | 59.1     |
+| train/loss_actor        | -14.1    |
+| train/loss_critic       | 6.05     |
+| train/param_noise_di... | 0.159    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 19.4     |
+| param_noise_stddev      | 0.00602  |
+| reference_Q_mean        | 5.41     |
+| reference_Q_std         | 11.6     |
+| reference_action_mean   | -0.105   |
+| reference_action_std    | 0.91     |
+| reference_actor_Q_mean  | 6.1      |
+| reference_actor_Q_std   | 12.6     |
+| reference_perturbed_... | 0.921    |
+| rollout/Q_mean          | 12       |
+| rollout/actions_mean    | -0.0723  |
+| rollout/actions_std     | 0.852    |
+| rollout/episode_steps   | 80.3     |
+| rollout/episodes        | 772      |
+| rollout/return          | 13.7     |
+| rollout/return_history  | 23.7     |
+| total/duration          | 1.06e+03 |
+| total/episodes          | 772      |
+| total/epochs            | 31       |
+| total/steps             | 62000    |
+| total/steps_per_second  | 58.5     |
+| train/loss_actor        | -14.1    |
+| train/loss_critic       | 5.71     |
+| train/param_noise_di... | 0.28     |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 11.8     |
+| param_noise_stddev      | 0.00545  |
+| reference_Q_mean        | 5.94     |
+| reference_Q_std         | 12.6     |
+| reference_action_mean   | -0.0202  |
+| reference_action_std    | 0.921    |
+| reference_actor_Q_mean  | 6.5      |
+| reference_actor_Q_std   | 13.4     |
+| reference_perturbed_... | 0.925    |
+| rollout/Q_mean          | 12.3     |
+| rollout/actions_mean    | -0.0721  |
+| rollout/actions_std     | 0.853    |
+| rollout/episode_steps   | 80.4     |
+| rollout/episodes        | 795      |
+| rollout/return          | 13.9     |
+| rollout/return_history  | 21.3     |
+| total/duration          | 1.1e+03  |
+| total/episodes          | 795      |
+| total/epochs            | 32       |
+| total/steps             | 64000    |
+| total/steps_per_second  | 58       |
+| train/loss_actor        | -14.3    |
+| train/loss_critic       | 5.26     |
+| train/param_noise_di... | 0.136    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 2        |
+| eval/return             | 0        |
+| eval/return_history     | 10.8     |
+| param_noise_stddev      | 0.00494  |
+| reference_Q_mean        | 5.27     |
+| reference_Q_std         | 12       |
+| reference_action_mean   | -0.127   |
+| reference_action_std    | 0.931    |
+| reference_actor_Q_mean  | 6.22     |
+| reference_actor_Q_std   | 13.3     |
+| reference_perturbed_... | 0.944    |
+| rollout/Q_mean          | 12.7     |
+| rollout/actions_mean    | -0.071   |
+| rollout/actions_std     | 0.853    |
+| rollout/episode_steps   | 80.5     |
+| rollout/episodes        | 820      |
+| rollout/return          | 14.2     |
+| rollout/return_history  | 20.6     |
+| total/duration          | 1.15e+03 |
+| total/episodes          | 820      |
+| total/epochs            | 33       |
+| total/steps             | 66000    |
+| total/steps_per_second  | 57.4     |
+| train/loss_actor        | -15.4    |
+| train/loss_critic       | 8.46     |
+| train/param_noise_di... | 0.206    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 7.85     |
+| param_noise_stddev      | 0.00456  |
+| reference_Q_mean        | 5.42     |
+| reference_Q_std         | 12.8     |
+| reference_action_mean   | -0.0878  |
+| reference_action_std    | 0.946    |
+| reference_actor_Q_mean  | 6.12     |
+| reference_actor_Q_std   | 13.8     |
+| reference_perturbed_... | 0.94     |
+| rollout/Q_mean          | 12.9     |
+| rollout/actions_mean    | -0.0709  |
+| rollout/actions_std     | 0.854    |
+| rollout/episode_steps   | 80.5     |
+| rollout/episodes        | 844      |
+| rollout/return          | 14.2     |
+| rollout/return_history  | 17.4     |
+| total/duration          | 1.2e+03  |
+| total/episodes          | 844      |
+| total/epochs            | 34       |
+| total/steps             | 68000    |
+| total/steps_per_second  | 56.9     |
+| train/loss_actor        | -16.1    |
+| train/loss_critic       | 5.77     |
+| train/param_noise_di... | 0.248    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 7        |
+| eval/return_history     | 4.88     |
+| param_noise_stddev      | 0.00421  |
+| reference_Q_mean        | 5.42     |
+| reference_Q_std         | 13       |
+| reference_action_mean   | -0.0369  |
+| reference_action_std    | 0.938    |
+| reference_actor_Q_mean  | 6.2      |
+| reference_actor_Q_std   | 14.3     |
+| reference_perturbed_... | 0.934    |
+| rollout/Q_mean          | 13       |
+| rollout/actions_mean    | -0.0726  |
+| rollout/actions_std     | 0.854    |
+| rollout/episode_steps   | 80.5     |
+| rollout/episodes        | 869      |
+| rollout/return          | 14.1     |
+| rollout/return_history  | 16.5     |
+| total/duration          | 1.24e+03 |
+| total/episodes          | 869      |
+| total/epochs            | 35       |
+| total/steps             | 70000    |
+| total/steps_per_second  | 56.3     |
+| train/loss_actor        | -15.1    |
+| train/loss_critic       | 5.63     |
+| train/param_noise_di... | 0.345    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 8.91     |
+| param_noise_stddev      | 0.00405  |
+| reference_Q_mean        | 5.3      |
+| reference_Q_std         | 13       |
+| reference_action_mean   | -0.0455  |
+| reference_action_std    | 0.927    |
+| reference_actor_Q_mean  | 6.13     |
+| reference_actor_Q_std   | 14.6     |
+| reference_perturbed_... | 0.925    |
+| rollout/Q_mean          | 13.2     |
+| rollout/actions_mean    | -0.071   |
+| rollout/actions_std     | 0.854    |
+| rollout/episode_steps   | 80.6     |
+| rollout/episodes        | 893      |
+| rollout/return          | 14.3     |
+| rollout/return_history  | 17.7     |
+| total/duration          | 1.29e+03 |
+| total/episodes          | 893      |
+| total/epochs            | 36       |
+| total/steps             | 72000    |
+| total/steps_per_second  | 55.8     |
+| train/loss_actor        | -15.7    |
+| train/loss_critic       | 5.63     |
+| train/param_noise_di... | 0.152    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 61       |
+| eval/return_history     | 9.26     |
+| param_noise_stddev      | 0.00397  |
+| reference_Q_mean        | 4.98     |
+| reference_Q_std         | 12.2     |
+| reference_action_mean   | -0.0696  |
+| reference_action_std    | 0.912    |
+| reference_actor_Q_mean  | 5.77     |
+| reference_actor_Q_std   | 13.5     |
+| reference_perturbed_... | 0.915    |
+| rollout/Q_mean          | 13.4     |
+| rollout/actions_mean    | -0.0716  |
+| rollout/actions_std     | 0.855    |
+| rollout/episode_steps   | 80.6     |
+| rollout/episodes        | 917      |
+| rollout/return          | 14       |
+| rollout/return_history  | 12.5     |
+| total/duration          | 1.34e+03 |
+| total/episodes          | 917      |
+| total/epochs            | 37       |
+| total/steps             | 74000    |
+| total/steps_per_second  | 55.2     |
+| train/loss_actor        | -16.3    |
+| train/loss_critic       | 9.39     |
+| train/param_noise_di... | 0.148    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 2        |
+| eval/return             | 14.5     |
+| eval/return_history     | 11.3     |
+| param_noise_stddev      | 0.00381  |
+| reference_Q_mean        | 5.78     |
+| reference_Q_std         | 12.9     |
+| reference_action_mean   | -0.171   |
+| reference_action_std    | 0.936    |
+| reference_actor_Q_mean  | 6.51     |
+| reference_actor_Q_std   | 14.3     |
+| reference_perturbed_... | 0.949    |
+| rollout/Q_mean          | 13.6     |
+| rollout/actions_mean    | -0.0701  |
+| rollout/actions_std     | 0.855    |
+| rollout/episode_steps   | 80.7     |
+| rollout/episodes        | 941      |
+| rollout/return          | 14.4     |
+| rollout/return_history  | 15.6     |
+| total/duration          | 1.39e+03 |
+| total/episodes          | 941      |
+| total/epochs            | 38       |
+| total/steps             | 76000    |
+| total/steps_per_second  | 54.7     |
+| train/loss_actor        | -16.1    |
+| train/loss_critic       | 8.69     |
+| train/param_noise_di... | 0.275    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 14.5     |
+| param_noise_stddev      | 0.00352  |
+| reference_Q_mean        | 5.1      |
+| reference_Q_std         | 12.4     |
+| reference_action_mean   | -0.0996  |
+| reference_action_std    | 0.902    |
+| reference_actor_Q_mean  | 6.01     |
+| reference_actor_Q_std   | 13.8     |
+| reference_perturbed_... | 0.9      |
+| rollout/Q_mean          | 13.9     |
+| rollout/actions_mean    | -0.068   |
+| rollout/actions_std     | 0.856    |
+| rollout/episode_steps   | 80.8     |
+| rollout/episodes        | 965      |
+| rollout/return          | 14.9     |
+| rollout/return_history  | 21.4     |
+| total/duration          | 1.44e+03 |
+| total/episodes          | 965      |
+| total/epochs            | 39       |
+| total/steps             | 78000    |
+| total/steps_per_second  | 54.2     |
+| train/loss_actor        | -16.3    |
+| train/loss_critic       | 7.97     |
+| train/param_noise_di... | 0.225    |
+--------------------------------------
+
+--------------------------------------
+| eval/episodes           | 1        |
+| eval/return             | 21       |
+| eval/return_history     | 13.1     |
+| param_noise_stddev      | 0.00359  |
+| reference_Q_mean        | 5.31     |
+| reference_Q_std         | 12.2     |
+| reference_action_mean   | 0.000404 |
+| reference_action_std    | 0.911    |
+| reference_actor_Q_mean  | 6.26     |
+| reference_actor_Q_std   | 13.8     |
+| reference_perturbed_... | 0.929    |
+| rollout/Q_mean          | 14.2     |
+| rollout/actions_mean    | -0.0662  |
+| rollout/actions_std     | 0.857    |
+| rollout/episode_steps   | 80.8     |
+| rollout/episodes        | 989      |
+| rollout/return          | 15.2     |
+| rollout/return_history  | 23.5     |
+| total/duration          | 1.49e+03 |
+| total/episodes          | 989      |
 | total/epochs            | 40       |
 | total/steps             | 80000    |
-| total/steps_per_second  | 67.9     |
-| train/loss_actor        | -31.7    |
-| train/loss_critic       | 60.6     |
-| train/param_noise_di... | 0.221    |
+| total/steps_per_second  | 53.6     |
+| train/loss_actor        | -16.7    |
+| train/loss_critic       | 14.9     |
+| train/param_noise_di... | 0.171    |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 0        |
-| eval/return             | nan      |
-| eval/return_history     | 14.8     |
-| param_noise_stddev      | 0.00897  |
-| reference_Q_mean        | 24       |
-| reference_Q_std         | 36.8     |
-| reference_action_mean   | 0.107    |
-| reference_action_std    | 0.923    |
-| reference_actor_Q_mean  | 25.4     |
-| reference_actor_Q_std   | 38.8     |
-| reference_perturbed_... | 0.922    |
-| rollout/Q_mean          | 31.2     |
-| rollout/actions_mean    | 0.301    |
-| rollout/actions_std     | 0.816    |
-| rollout/episode_steps   | 113      |
-| rollout/episodes        | 728      |
-| rollout/return          | 34.5     |
-| rollout/return_history  | 36.2     |
-| total/duration          | 1.21e+03 |
-| total/episodes          | 728      |
+| eval/episodes           | 1        |
+| eval/return             | 0        |
+| eval/return_history     | 14.4     |
+| param_noise_stddev      | 0.00332  |
+| reference_Q_mean        | 5.59     |
+| reference_Q_std         | 12.2     |
+| reference_action_mean   | -0.0505  |
+| reference_action_std    | 0.906    |
+| reference_actor_Q_mean  | 6.45     |
+| reference_actor_Q_std   | 13.6     |
+| reference_perturbed_... | 0.914    |
+| rollout/Q_mean          | 14.5     |
+| rollout/actions_mean    | -0.0665  |
+| rollout/actions_std     | 0.858    |
+| rollout/episode_steps   | 80.9     |
+| rollout/episodes        | 1.01e+03 |
+| rollout/return          | 15.6     |
+| rollout/return_history  | 29.8     |
+| total/duration          | 1.55e+03 |
+| total/episodes          | 1.01e+03 |
 | total/epochs            | 41       |
 | total/steps             | 82000    |
-| total/steps_per_second  | 67.5     |
-| train/loss_actor        | -30.7    |
-| train/loss_critic       | 66       |
-| train/param_noise_di... | 0.109    |
+| total/steps_per_second  | 53.1     |
+| train/loss_actor        | -16.5    |
+| train/loss_critic       | 5.9      |
+| train/param_noise_di... | 0.147    |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 2        |
-| eval/return             | 21.8     |
-| eval/return_history     | 14.5     |
-| param_noise_stddev      | 0.00897  |
-| reference_Q_mean        | 22.7     |
-| reference_Q_std         | 35.7     |
-| reference_action_mean   | -0.12    |
-| reference_action_std    | 0.913    |
-| reference_actor_Q_mean  | 23.2     |
-| reference_actor_Q_std   | 36       |
-| reference_perturbed_... | 0.918    |
-| rollout/Q_mean          | 31.2     |
-| rollout/actions_mean    | 0.292    |
-| rollout/actions_std     | 0.82     |
-| rollout/episode_steps   | 113      |
-| rollout/episodes        | 746      |
-| rollout/return          | 34.7     |
-| rollout/return_history  | 36.3     |
-| total/duration          | 1.25e+03 |
-| total/episodes          | 746      |
+| eval/episodes           | 1        |
+| eval/return             | 104      |
+| eval/return_history     | 20.9     |
+| param_noise_stddev      | 0.00338  |
+| reference_Q_mean        | 6.61     |
+| reference_Q_std         | 13.2     |
+| reference_action_mean   | -0.059   |
+| reference_action_std    | 0.907    |
+| reference_actor_Q_mean  | 7.66     |
+| reference_actor_Q_std   | 14.8     |
+| reference_perturbed_... | 0.905    |
+| rollout/Q_mean          | 15       |
+| rollout/actions_mean    | -0.0632  |
+| rollout/actions_std     | 0.858    |
+| rollout/episode_steps   | 81       |
+| rollout/episodes        | 1.04e+03 |
+| rollout/return          | 16.2     |
+| rollout/return_history  | 34.1     |
+| total/duration          | 1.6e+03  |
+| total/episodes          | 1.04e+03 |
 | total/epochs            | 42       |
 | total/steps             | 84000    |
-| total/steps_per_second  | 67.2     |
-| train/loss_actor        | -29.7    |
-| train/loss_critic       | 56.8     |
-| train/param_noise_di... | 0.191    |
+| total/steps_per_second  | 52.6     |
+| train/loss_actor        | -17.5    |
+| train/loss_critic       | 6.08     |
+| train/param_noise_di... | 0.154    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 2        |
-| eval/return             | 14.3     |
-| eval/return_history     | 14.5     |
-| param_noise_stddev      | 0.00915  |
-| reference_Q_mean        | 24.8     |
-| reference_Q_std         | 35.5     |
-| reference_action_mean   | -0.14    |
-| reference_action_std    | 0.954    |
-| reference_actor_Q_mean  | 25.9     |
-| reference_actor_Q_std   | 36.4     |
-| reference_perturbed_... | 0.95     |
-| rollout/Q_mean          | 31.5     |
-| rollout/actions_mean    | 0.283    |
-| rollout/actions_std     | 0.823    |
-| rollout/episode_steps   | 112      |
-| rollout/episodes        | 768      |
-| rollout/return          | 34.9     |
-| rollout/return_history  | 38.9     |
-| total/duration          | 1.29e+03 |
-| total/episodes          | 768      |
+| eval/return             | 12.5     |
+| eval/return_history     | 22.1     |
+| param_noise_stddev      | 0.00338  |
+| reference_Q_mean        | 6.84     |
+| reference_Q_std         | 13.7     |
+| reference_action_mean   | -0.146   |
+| reference_action_std    | 0.906    |
+| reference_actor_Q_mean  | 7.86     |
+| reference_actor_Q_std   | 15.3     |
+| reference_perturbed_... | 0.91     |
+| rollout/Q_mean          | 15.3     |
+| rollout/actions_mean    | -0.059   |
+| rollout/actions_std     | 0.86     |
+| rollout/episode_steps   | 81.1     |
+| rollout/episodes        | 1.06e+03 |
+| rollout/return          | 16.5     |
+| rollout/return_history  | 32.2     |
+| total/duration          | 1.65e+03 |
+| total/episodes          | 1.06e+03 |
 | total/epochs            | 43       |
 | total/steps             | 86000    |
-| total/steps_per_second  | 66.8     |
-| train/loss_actor        | -30.5    |
-| train/loss_critic       | 112      |
-| train/param_noise_di... | 0.117    |
+| total/steps_per_second  | 52.1     |
+| train/loss_actor        | -17.6    |
+| train/loss_critic       | 7.12     |
+| train/param_noise_di... | 0.182    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 7.06     |
-| eval/return_history     | 15.2     |
-| param_noise_stddev      | 0.0103   |
-| reference_Q_mean        | 23.4     |
-| reference_Q_std         | 35.2     |
-| reference_action_mean   | 0.232    |
-| reference_action_std    | 0.912    |
-| reference_actor_Q_mean  | 25       |
-| reference_actor_Q_std   | 37.6     |
-| reference_perturbed_... | 0.902    |
-| rollout/Q_mean          | 31.8     |
-| rollout/actions_mean    | 0.279    |
-| rollout/actions_std     | 0.826    |
-| rollout/episode_steps   | 110      |
-| rollout/episodes        | 796      |
-| rollout/return          | 35       |
-| rollout/return_history  | 39.3     |
-| total/duration          | 1.32e+03 |
-| total/episodes          | 796      |
+| eval/return             | 0        |
+| eval/return_history     | 25.2     |
+| param_noise_stddev      | 0.00332  |
+| reference_Q_mean        | 6.53     |
+| reference_Q_std         | 13.1     |
+| reference_action_mean   | -0.264   |
+| reference_action_std    | 0.885    |
+| reference_actor_Q_mean  | 7.67     |
+| reference_actor_Q_std   | 15       |
+| reference_perturbed_... | 0.874    |
+| rollout/Q_mean          | 15.7     |
+| rollout/actions_mean    | -0.0574  |
+| rollout/actions_std     | 0.861    |
+| rollout/episode_steps   | 81.1     |
+| rollout/episodes        | 1.08e+03 |
+| rollout/return          | 17.1     |
+| rollout/return_history  | 36.8     |
+| total/duration          | 1.7e+03  |
+| total/episodes          | 1.08e+03 |
 | total/epochs            | 44       |
 | total/steps             | 88000    |
-| total/steps_per_second  | 66.5     |
-| train/loss_actor        | -30.7    |
-| train/loss_critic       | 57.5     |
-| train/param_noise_di... | 0.121    |
+| total/steps_per_second  | 51.7     |
+| train/loss_actor        | -17.5    |
+| train/loss_critic       | 6.73     |
+| train/param_noise_di... | 0.363    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 16.1     |
-| eval/return_history     | 17.1     |
-| param_noise_stddev      | 0.0101   |
-| reference_Q_mean        | 24.3     |
-| reference_Q_std         | 35.9     |
-| reference_action_mean   | 0.333    |
-| reference_action_std    | 0.884    |
-| reference_actor_Q_mean  | 24.8     |
-| reference_actor_Q_std   | 36.7     |
-| reference_perturbed_... | 0.895    |
-| rollout/Q_mean          | 32       |
-| rollout/actions_mean    | 0.279    |
-| rollout/actions_std     | 0.827    |
-| rollout/episode_steps   | 110      |
-| rollout/episodes        | 821      |
-| rollout/return          | 35.5     |
-| rollout/return_history  | 43.3     |
-| total/duration          | 1.36e+03 |
-| total/episodes          | 821      |
+| eval/return             | 21       |
+| eval/return_history     | 24.9     |
+| param_noise_stddev      | 0.00306  |
+| reference_Q_mean        | 6.81     |
+| reference_Q_std         | 13.3     |
+| reference_action_mean   | -0.0645  |
+| reference_action_std    | 0.908    |
+| reference_actor_Q_mean  | 7.76     |
+| reference_actor_Q_std   | 14.5     |
+| reference_perturbed_... | 0.908    |
+| rollout/Q_mean          | 15.9     |
+| rollout/actions_mean    | -0.0591  |
+| rollout/actions_std     | 0.861    |
+| rollout/episode_steps   | 81.2     |
+| rollout/episodes        | 1.11e+03 |
+| rollout/return          | 17.2     |
+| rollout/return_history  | 34.5     |
+| total/duration          | 1.76e+03 |
+| total/episodes          | 1.11e+03 |
 | total/epochs            | 45       |
 | total/steps             | 90000    |
-| total/steps_per_second  | 66.2     |
-| train/loss_actor        | -32.9    |
-| train/loss_critic       | 56.7     |
-| train/param_noise_di... | 0.105    |
+| total/steps_per_second  | 51.2     |
+| train/loss_actor        | -17.5    |
+| train/loss_critic       | 5.3      |
+| train/param_noise_di... | 0.325    |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 3        |
-| eval/return             | 18.3     |
-| eval/return_history     | 17.7     |
-| param_noise_stddev      | 0.0107   |
-| reference_Q_mean        | 24.3     |
-| reference_Q_std         | 35.9     |
-| reference_action_mean   | 0.3      |
-| reference_action_std    | 0.923    |
-| reference_actor_Q_mean  | 25.7     |
-| reference_actor_Q_std   | 37.4     |
-| reference_perturbed_... | 0.915    |
-| rollout/Q_mean          | 32.2     |
-| rollout/actions_mean    | 0.277    |
-| rollout/actions_std     | 0.828    |
-| rollout/episode_steps   | 109      |
-| rollout/episodes        | 844      |
-| rollout/return          | 35.7     |
-| rollout/return_history  | 43.8     |
-| total/duration          | 1.4e+03  |
-| total/episodes          | 844      |
+| eval/episodes           | 1        |
+| eval/return             | 38       |
+| eval/return_history     | 19.1     |
+| param_noise_stddev      | 0.00306  |
+| reference_Q_mean        | 6.38     |
+| reference_Q_std         | 13.1     |
+| reference_action_mean   | -0.307   |
+| reference_action_std    | 0.861    |
+| reference_actor_Q_mean  | 7.65     |
+| reference_actor_Q_std   | 14.7     |
+| reference_perturbed_... | 0.882    |
+| rollout/Q_mean          | 16.2     |
+| rollout/actions_mean    | -0.0641  |
+| rollout/actions_std     | 0.861    |
+| rollout/episode_steps   | 81.2     |
+| rollout/episodes        | 1.13e+03 |
+| rollout/return          | 17.2     |
+| rollout/return_history  | 28.6     |
+| total/duration          | 1.81e+03 |
+| total/episodes          | 1.13e+03 |
 | total/epochs            | 46       |
 | total/steps             | 92000    |
-| total/steps_per_second  | 65.8     |
-| train/loss_actor        | -30.3    |
-| train/loss_critic       | 77.4     |
-| train/param_noise_di... | 0.166    |
+| total/steps_per_second  | 50.8     |
+| train/loss_actor        | -17.9    |
+| train/loss_critic       | 6.37     |
+| train/param_noise_di... | 0.206    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 17.9     |
-| eval/return_history     | 21.3     |
-| param_noise_stddev      | 0.0101   |
-| reference_Q_mean        | 24.3     |
-| reference_Q_std         | 35.7     |
-| reference_action_mean   | 0.216    |
-| reference_action_std    | 0.926    |
-| reference_actor_Q_mean  | 24.8     |
-| reference_actor_Q_std   | 36.5     |
-| reference_perturbed_... | 0.92     |
-| rollout/Q_mean          | 32.3     |
-| rollout/actions_mean    | 0.277    |
-| rollout/actions_std     | 0.829    |
-| rollout/episode_steps   | 108      |
-| rollout/episodes        | 870      |
-| rollout/return          | 36.1     |
-| rollout/return_history  | 44.8     |
-| total/duration          | 1.43e+03 |
-| total/episodes          | 870      |
+| eval/return             | 28       |
+| eval/return_history     | 13       |
+| param_noise_stddev      | 0.00306  |
+| reference_Q_mean        | 7.27     |
+| reference_Q_std         | 12.7     |
+| reference_action_mean   | -0.222   |
+| reference_action_std    | 0.897    |
+| reference_actor_Q_mean  | 8.43     |
+| reference_actor_Q_std   | 14.1     |
+| reference_perturbed_... | 0.887    |
+| rollout/Q_mean          | 16.5     |
+| rollout/actions_mean    | -0.072   |
+| rollout/actions_std     | 0.86     |
+| rollout/episode_steps   | 81.3     |
+| rollout/episodes        | 1.16e+03 |
+| rollout/return          | 17.4     |
+| rollout/return_history  | 27.6     |
+| total/duration          | 1.87e+03 |
+| total/episodes          | 1.16e+03 |
 | total/epochs            | 47       |
 | total/steps             | 94000    |
-| total/steps_per_second  | 65.5     |
-| train/loss_actor        | -30.8    |
-| train/loss_critic       | 62       |
-| train/param_noise_di... | 0.318    |
+| total/steps_per_second  | 50.3     |
+| train/loss_actor        | -18.3    |
+| train/loss_critic       | 9.9      |
+| train/param_noise_di... | 0.15     |
 --------------------------------------
 
 --------------------------------------
-| eval/episodes           | 1        |
-| eval/return             | 10.2     |
-| eval/return_history     | 24.6     |
-| param_noise_stddev      | 0.0105   |
-| reference_Q_mean        | 24.3     |
-| reference_Q_std         | 35.9     |
-| reference_action_mean   | 0.246    |
-| reference_action_std    | 0.911    |
-| reference_actor_Q_mean  | 25.5     |
-| reference_actor_Q_std   | 37.4     |
-| reference_perturbed_... | 0.914    |
-| rollout/Q_mean          | 32.6     |
-| rollout/actions_mean    | 0.271    |
-| rollout/actions_std     | 0.833    |
-| rollout/episode_steps   | 107      |
-| rollout/episodes        | 898      |
-| rollout/return          | 36.6     |
-| rollout/return_history  | 49.7     |
-| total/duration          | 1.47e+03 |
-| total/episodes          | 898      |
+| eval/episodes           | 2        |
+| eval/return             | 12       |
+| eval/return_history     | 18.1     |
+| param_noise_stddev      | 0.00319  |
+| reference_Q_mean        | 7.53     |
+| reference_Q_std         | 12.9     |
+| reference_action_mean   | -0.255   |
+| reference_action_std    | 0.891    |
+| reference_actor_Q_mean  | 8.75     |
+| reference_actor_Q_std   | 14.4     |
+| reference_perturbed_... | 0.887    |
+| rollout/Q_mean          | 16.7     |
+| rollout/actions_mean    | -0.0726  |
+| rollout/actions_std     | 0.861    |
+| rollout/episode_steps   | 81.3     |
+| rollout/episodes        | 1.18e+03 |
+| rollout/return          | 17.7     |
+| rollout/return_history  | 25.5     |
+| total/duration          | 1.92e+03 |
+| total/episodes          | 1.18e+03 |
 | total/epochs            | 48       |
 | total/steps             | 96000    |
-| total/steps_per_second  | 65.2     |
-| train/loss_actor        | -31.9    |
-| train/loss_critic       | 67.3     |
-| train/param_noise_di... | 0.124    |
+| total/steps_per_second  | 49.9     |
+| train/loss_actor        | -18.3    |
+| train/loss_critic       | 8.37     |
+| train/param_noise_di... | 0.131    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 58.9     |
-| eval/return_history     | 27.9     |
-| param_noise_stddev      | 0.0114   |
-| reference_Q_mean        | 25.8     |
-| reference_Q_std         | 35.8     |
-| reference_action_mean   | -0.0489  |
+| eval/return             | 0        |
+| eval/return_history     | 20.6     |
+| param_noise_stddev      | 0.00306  |
+| reference_Q_mean        | 7.35     |
+| reference_Q_std         | 12.1     |
+| reference_action_mean   | -0.166   |
 | reference_action_std    | 0.928    |
-| reference_actor_Q_mean  | 26       |
-| reference_actor_Q_std   | 35.4     |
-| reference_perturbed_... | 0.937    |
-| rollout/Q_mean          | 32.9     |
-| rollout/actions_mean    | 0.264    |
-| rollout/actions_std     | 0.837    |
-| rollout/episode_steps   | 105      |
-| rollout/episodes        | 929      |
-| rollout/return          | 37.1     |
-| rollout/return_history  | 50       |
-| total/duration          | 1.51e+03 |
-| total/episodes          | 929      |
+| reference_actor_Q_mean  | 8.61     |
+| reference_actor_Q_std   | 13.9     |
+| reference_perturbed_... | 0.927    |
+| rollout/Q_mean          | 17       |
+| rollout/actions_mean    | -0.0689  |
+| rollout/actions_std     | 0.862    |
+| rollout/episode_steps   | 81.4     |
+| rollout/episodes        | 1.2e+03  |
+| rollout/return          | 18       |
+| rollout/return_history  | 26.2     |
+| total/duration          | 1.98e+03 |
+| total/episodes          | 1.2e+03  |
 | total/epochs            | 49       |
 | total/steps             | 98000    |
-| total/steps_per_second  | 64.9     |
-| train/loss_actor        | -32.1    |
-| train/loss_critic       | 54.5     |
-| train/param_noise_di... | 0.167    |
+| total/steps_per_second  | 49.5     |
+| train/loss_actor        | -18.7    |
+| train/loss_critic       | 8.82     |
+| train/param_noise_di... | 0.222    |
 --------------------------------------
 
 --------------------------------------
 | eval/episodes           | 1        |
-| eval/return             | 0.031    |
-| eval/return_history     | 29.6     |
-| param_noise_stddev      | 0.0105   |
-| reference_Q_mean        | 23.8     |
-| reference_Q_std         | 33.4     |
-| reference_action_mean   | 0.117    |
-| reference_action_std    | 0.921    |
-| reference_actor_Q_mean  | 24.4     |
-| reference_actor_Q_std   | 34.1     |
-| reference_perturbed_... | 0.921    |
-| rollout/Q_mean          | 33.1     |
-| rollout/actions_mean    | 0.256    |
-| rollout/actions_std     | 0.839    |
-| rollout/episode_steps   | 105      |
-| rollout/episodes        | 956      |
-| rollout/return          | 37.5     |
-| rollout/return_history  | 50.7     |
-| total/duration          | 1.55e+03 |
-| total/episodes          | 956      |
+| eval/return             | 43       |
+| eval/return_history     | 27.9     |
+| param_noise_stddev      | 0.00306  |
+| reference_Q_mean        | 6.65     |
+| reference_Q_std         | 11.7     |
+| reference_action_mean   | -0.15    |
+| reference_action_std    | 0.929    |
+| reference_actor_Q_mean  | 7.83     |
+| reference_actor_Q_std   | 13.7     |
+| reference_perturbed_... | 0.917    |
+| rollout/Q_mean          | 17.3     |
+| rollout/actions_mean    | -0.0653  |
+| rollout/actions_std     | 0.863    |
+| rollout/episode_steps   | 81.4     |
+| rollout/episodes        | 1.23e+03 |
+| rollout/return          | 18.3     |
+| rollout/return_history  | 31.6     |
+| total/duration          | 2.04e+03 |
+| total/episodes          | 1.23e+03 |
 | total/epochs            | 50       |
 | total/steps             | 100000   |
-| total/steps_per_second  | 64.6     |
-| train/loss_actor        | -29      |
-| train/loss_critic       | 79.6     |
-| train/param_noise_di... | 0.202    |
+| total/steps_per_second  | 49.1     |
+| train/loss_actor        | -19.2    |
+| train/loss_critic       | 6.95     |
+| train/param_noise_di... | 0.245    |
 --------------------------------------
 
-total runtime: 1550.770509004593s
+total runtime: 2039.27685880661s
 Training
 </pre>
 </div>
@@ -13881,17 +13840,26 @@ Training
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Plot the rewards.</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">savgol_filter</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
+<span class="n">myresults_b</span> <span class="o">=</span> <span class="n">myresults</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data_eval.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">myresults</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;rewards_eval.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
 <span class="n">start_time</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="n">to_plot</span> <span class="o">=</span> <span class="s2">&quot;filtered_rewards&quot;</span>
+<span class="n">to_plot</span> <span class="o">=</span> <span class="s2">&quot;session_rewards&quot;</span>
 
 <span class="k">if</span> <span class="n">to_plot</span> <span class="o">==</span> <span class="s2">&quot;location&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
@@ -13929,13 +13897,20 @@ Training
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
 <span class="k">elif</span> <span class="n">to_plot</span> <span class="o">==</span> <span class="s2">&quot;filtered_rewards&quot;</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="mi">4001</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reward&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="mi">8001</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reward&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
 <span class="k">elif</span> <span class="n">to_plot</span> <span class="o">==</span> <span class="s2">&quot;loss&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="n">myresults</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">][</span><span class="n">start_time</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
+<span class="k">elif</span> <span class="n">to_plot</span> <span class="o">==</span> <span class="s2">&quot;session_rewards&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reward&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial Reward:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final Reward:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:])</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 
 </div>
@@ -13952,7 +13927,8 @@ Training
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>0.8219013736639923
+<pre>Initial Reward 6.61
+Final Reward 45.49
 </pre>
 </div>
 </div>
@@ -13965,7 +13941,7 @@ Training
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -13983,7 +13959,18 @@ Training
 <h2 id="Reflections">Reflections<a class="anchor-link" href="#Reflections">&#182;</a></h2><p><strong>Question 1</strong>: Describe the task that you specified in <code>task.py</code>.  How did you design the reward function?</p>
 <p><strong>Answer</strong>:
 The task consist in hover on a specified point in space, and after some time move to another point. In order to achieve that two reward functions exists, with a flag that switches from one to the other after a fixed amount of simulation time.</p>
-<p>The reward function consists on the Euclidean distance from the Quadcopter to a point. But in order to decrease the value whit the distance, and to penalize when the Quadcopter is far away the reward becomes $$R = 1-tanh(\sqrt{a^2 + b^2})$$</p>
+<p>The reward is a function of the Euclidean distance from the Quadcopter to a point. If the distance is less than <code>5</code>, the reward is <code>1</code>, else the reward is <code>0</code>.</p>
+<p>This reward function proved to work better than the previous one: $$R = 1-tanh(\sqrt{a^2 + b^2})$$</p>
+<p>The environment takes 3 values:</p>
+
+<pre><code>Value 0: Rotor Speed (affecting the 4 rotors)
+Value 1: Front/Rear Weight (adding more speed to the front or the back)
+Value 2: Left/Right Weight (adding more speed to the left or the right)</code></pre>
+<p>In this case full control of each rotor was not needed, in this way the dimensions was reduced, while the Quadcopter behaves smoothly.</p>
+<p>The environment status consists on <code>6</code> values, repeated by 3 timesteps (<code>18</code> total values):</p>
+
+<pre><code>Values 0, 1, 2: Vector to target
+Value 3, 4, 5: Drone rotation</code></pre>
 
 </div>
 </div>
@@ -13998,10 +13985,19 @@ The task consist in hover on a specified point in space, and after some time mov
 <li>What was your final choice of hyperparameters (such as $\alpha$, $\gamma$, $\epsilon$, etc.)?</li>
 <li>What neural network architecture did you use (if any)? Specify layers, sizes, activation functions, etc.</li>
 </ul>
-<p><strong>Answer</strong>: I wanted to test Deep Q Learning ( <a href="https://arxiv.org/abs/1312.5602">https://arxiv.org/abs/1312.5602</a> ) that is designed for discrete actions, but quickly become evident that the speed of the rotors needed really subtle adjustments, impossible to achieve without an explosion on the amount of dimensions.</p>
-<p>I switched then to Deep DPG ( <a href="https://arxiv.org/pdf/1509.02971.pdf">https://arxiv.org/pdf/1509.02971.pdf</a> ) using the code available on <a href="https://github.com/openai/baselines/tree/master/baselines/ddpg">https://github.com/openai/baselines/tree/master/baselines/ddpg</a> . The big advantage was that is designed to work on a great variety of scenarios without adjusting the Hyperparameters for each individual case.</p>
-<p>Still was challenging the selection of the optimal set of actions and observations. The model output is 3 values: Rotor Speed (affecting the 4 rotors), Front/Rear Weight (adding more speed to the front or the back), and Left/Right Weight (adding more speed to the left or the right). In this case full control of each rotor was not needed, in this way the dimensions was reduced, while the Quadcopter behaves smoothly.</p>
-<p>Deep DPG uses two neural networks, one called Actor (which specifies the current policy by deterministically mapping states to a specific action) and the other called Critic ( $Q(s,a)$ is learned using the Bellman equation). The Actor uses 3 fully connected layers with Relu and Tanh on the final layer. The Critic also uses 3 fully connected layers with Relu, but has no activation function on the final layer.</p>
+<p><strong>Answer</strong>: I tested Deep Q Learning ( <a href="https://arxiv.org/abs/1312.5602">https://arxiv.org/abs/1312.5602</a> ) that is designed for discrete actions, but quickly become evident that the speed of the rotors needed really subtle adjustments, impossible to achieve without an explosion on the amount of dimensions.</p>
+<p>I switched then to Deep DPG ( <a href="https://arxiv.org/pdf/1509.02971.pdf">https://arxiv.org/pdf/1509.02971.pdf</a> ) using the code available on <a href="https://github.com/openai/baselines/tree/master/baselines/ddpg">https://github.com/openai/baselines/tree/master/baselines/ddpg</a> . The big advantage was that is designed to work on a great variety of scenarios without big adjustments on the Hyperparameters for each individual case.</p>
+<p>Deep DPG is an off-policy algorithm that uses two neural networks, one called Actor $μ(s|θ^μ)$, which specifies the current policy by deterministically mapping states to a specific action. And the other called Critic, $Q(s,a)$ is learned using the Bellman equation.</p>
+<p>Off-policy is achieved by using a copy of the actor and critic networks is created, $Q′(s,a|θ^Q′)$ and $μ′(s|θ^μ′)$ respectively, that are used for calculating the target values.</p>
+<p>The Actor uses 3 fully connected layers (with size <code>64</code>) with Relu and Tanh on the final layer. The Critic also uses 3 fully connected layers (also with size <code>64</code>) with Relu, but has no activation function on the final layer.</p>
+<p>For the exploration noise is added to the Actor policy.</p>
+<p>The final hyperparameters are:</p>
+<ul>
+<li>$\gamma$: 0.99</li>
+<li>Batch size: 64</li>
+<li>Exploration noise: Adaptive Parametric Noise with standard deviation <code>0.2</code></li>
+<li>Layer size: 64</li>
+</ul>
 
 </div>
 </div>
@@ -14016,7 +14012,22 @@ The task consist in hover on a specified point in space, and after some time mov
 <li>Was there a gradual learning curve, or an aha moment?</li>
 <li>How good was the final performance of the agent? (e.g. mean rewards over the last 10 episodes)</li>
 </ul>
-<p><strong>Answer</strong>: Was hard, the Rewards increased slowly. The agent learned to not touch the ground, but was moving to far of the target. Only at the end of the training the agent learned to stay near the target, even if the chances of touching the ground where higher. The mean for the last 100 steps is 0.82.</p>
+<p><strong>Answer</strong>:</p>
+<p>Was relatively easy, the Rewards increased steadily. The agent learned to maintain its position inside the target zone for the longest time possible.</p>
+<p>Was a gradual learning curve, with some plateaus.</p>
+<p>The mean for the first 100 episodes is <code>6.61</code>, and for the last 100 episodes is <code>45.49</code>.</p>
+<p>During the design of the solution several Hyperparameters, Rewards functions, Actions and States were tested:</p>
+<ul>
+<li>Hyperparameters:<ul>
+<li>Neural Network layer size: 64, 128.</li>
+<li>$\gamma$: 0.95 - 0.99</li>
+<li>Exploration noise standard deviation: 0.2 - 0.5</li>
+</ul>
+</li>
+<li>Rewards: Continuous Reward function, Discrete Reward function</li>
+<li>Actions: Discrete actions, Individual control of each rotor, joint control of rotors</li>
+<li>State: Drone position, Vector to target</li>
+</ul>
 
 </div>
 </div>
@@ -14030,8 +14041,9 @@ The task consist in hover on a specified point in space, and after some time mov
 <li>What was the hardest part of the project? (e.g. getting started, plotting, specifying the task, etc.)</li>
 <li>Did you find anything interesting in how the quadcopter or your agent behaved?</li>
 </ul>
-<p><strong>Answer</strong>: The hardest part was debugging the code with so many important pieces: the Agent, the Environment and the Model. When the agent is not behaving as expected there are a large number of elements that could be affecting it.
-Was interesting to see the Quadcopter avoiding the ground at all costs. <strong>Bonus:</strong> 3D visualization of the initial, middle and final steps of the learning process: <a href="https://youtu.be/EIT1Er0hnRY">https://youtu.be/EIT1Er0hnRY</a> (Red color on the Quadcopter indicates high reward, black color indicates low reward)</p>
+<p><strong>Answer</strong>: The hardest part was debugging the code with so many important pieces: the Agent, the Environment and the Model. When the agent is not behaving as expected there are a large number of elements that could be affecting it.</p>
+<p>Was interesting to see the Quadcopter avoiding the ground at all costs. Eventually it also learned to correct its trajectory according to the target vector.</p>
+<p><strong>Bonus:</strong> 3D visualization of the final steps of the learning process: <a href="https://youtu.be/0t9zdAQR33M">https://youtu.be/0t9zdAQR33M</a> (Red color on the Quadcopter indicates <code>0</code> reward, green color indicates <code>1</code> reward)</p>
 
 </div>
 </div>
