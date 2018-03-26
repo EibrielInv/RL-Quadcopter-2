@@ -18,7 +18,7 @@ from mpi4py import MPI
 class action_space:
     def __init__(self):
         self.shape = (3,)
-        self.range = 600
+        self.range = 2000
         # self.low = np.array([-self.range, -self.range, -self.range, -self.range])
         # self.high = np.array([self.range, self.range, self.range, self.range])
         self.low = np.array([-self.range, -1., -1.])
@@ -27,21 +27,32 @@ class action_space:
 
 class observation_space:
     def __init__(self):
-        self.shape = (19,)
+        self.shape = (18,)
 
 
 class dummy_environment:
     def __init__(self, eval_=False):
         self.action_space = action_space()
         self.observation_space = observation_space()
-        self.task = Task(runtime=20.)
+        self.task = Task(runtime=5., init_pose=self.gen_pose())
         self.global_time = 0
+        self.episode_num = 0
         self.labels = ['time', 'x', 'y', 'z', 'phi', 'theta', 'psi', 'x_velocity',
                        'y_velocity', 'z_velocity', 'phi_velocity', 'theta_velocity',
-                       'psi_velocity', 'rotor_speed1', 'rotor_speed2', 'rotor_speed3', 'reward']
+                       'psi_velocity', 'rotor_speed1', 'rotor_speed2', 'rotor_speed3', 'reward', 'episode', 'vector_x', 'vector_y', 'vector_z']
         self.results = {x: [] for x in self.labels}
+        self.this_rewards = []
+        self.episode_rewards = []
         self.to_write = None
         self.eval = eval_
+        self.reset_count = 0
+
+    def gen_pose(self):
+        init_pose = np.random.uniform(-10, 10, 6)
+        init_pose += np.array([0.0, 0.0, 15.0, 0.0, 0.0, 0.0])
+        init_pose *= np.array([1.0, 1.0, 1.0, 0.0, 0.0, 0.0])
+        init_pose = np.array([0.0, 0.0, 15.0, 0.0, 0.0, 0.0])
+        return init_pose
 
     def seed(self, seed):
         self.seed = seed
@@ -50,23 +61,45 @@ class dummy_environment:
         # action += self.action_space.range
         action += np.array([self.action_space.range, 0., 0.])
         new_obs, r, done = self.task.step(action)
-        self.to_write = [self.global_time] + list(self.task.sim.pose) + list(self.task.sim.v) + list(self.task.sim.angular_v) + list(action) + [float(r)]
+        self.to_write = [self.global_time] + list(self.task.sim.pose) + list(self.task.sim.v) + list(self.task.sim.angular_v) + list(action) + [float(r)] + [self.episode_num] + list(self.task.state[:3])
+        # print(len(self.labels))
         for ii in range(len(self.labels)):
+            # print(self.to_write[ii])
             self.results[self.labels[ii]].append(self.to_write[ii])
         self.global_time += 1
         if self.eval:
+            file_output = 'data_eval.json'
+        else:
             file_output = 'data.json'
-            if self.global_time % 1000 == 0:
+        if self.global_time % 1000 == 0:
+            with open(file_output, 'w') as data_file:
+                json.dump(self.results,
+                          data_file,
+                          sort_keys=True,
+                          indent=4,
+                          separators=(',', ': '))
+        self.this_rewards.append(r)
+        return new_obs, r, done, {}
+
+    def reset(self):
+        if len(self.this_rewards) > 0:
+            self.episode_rewards.append(np.array(self.this_rewards).sum())
+            if self.reset_count % 100:
+                if self.eval:
+                    file_output = 'rewards_eval.json'
+                else:
+                    file_output = 'rewards.json'
                 with open(file_output, 'w') as data_file:
-                    json.dump(self.results,
+                    json.dump(self.episode_rewards,
                               data_file,
                               sort_keys=True,
                               indent=4,
                               separators=(',', ': '))
-        return new_obs, r, done, {}
-
-    def reset(self):
-        state = self.task.reset().reshape((19,))
+        state = self.task.reset().reshape((18,))
+        self.task.sim.pose = self.gen_pose()
+        self.this_rewards = []
+        self.episode_num += 1
+        self.reset_count += 1
         return state
 
     def close(self):

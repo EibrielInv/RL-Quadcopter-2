@@ -26,43 +26,53 @@ class Task():
         self.time_treshold = 10
 
         # Goal
-        self.target_pos = target_pos if target_pos is not None else np.array([0., 0., 10.])
-        self.target_pos = [np.array([0., 0., 10.]), np.array([0., 10., 0.])]
+        # self.target_pos = target_pos if target_pos is not None else np.array([0., 0., 10.])
+        self.target_pos = np.array([0., 0., 60.])
 
     def get_reward(self):
         """Uses current pose of sim to return reward."""
-        # reward = 1. - .3 * (abs(self.sim.pose[:3] - self.target_pos)).sum()
-        if self.sim.time > self.time_treshold:
-            target_pos = self.target_pos[1]
+        reward = 1. - np.tanh(np.linalg.norm(self.sim.pose[:3] - self.target_pos) * 0.3)
+        if np.linalg.norm(self.sim.pose[:3] - self.target_pos) < 3:
+            reward = 1.
         else:
-            target_pos = self.target_pos[0]
-        reward = 1. - np.tanh(np.linalg.norm(self.sim.pose[:3] - target_pos) * 0.5)
+            reward = 0.
         return reward
+
+    def get_vector(self, target_location, drone_location):
+        vector = target_location - drone_location
+        distance = np.linalg.norm(drone_location - target_location)
+        max_distance = 100.
+        scale_ = 1.0
+        if distance > max_distance:
+            scale_ = max_distance / distance
+        scaled_vector = vector * scale_ * 0.01
+        return scaled_vector
 
     def step(self, rotor_speeds_):
         """Uses action to obtain next state, reward, done."""
         rotor_speeds = np.array([.0, .0, .0, .0])
-        rotor_speeds[0] = rotor_speeds_[0] + ((rotor_speeds_[1] + rotor_speeds_[2])) * 0.1
-        rotor_speeds[1] = rotor_speeds_[0] + ((rotor_speeds_[1] - rotor_speeds_[2])) * 0.1
-        rotor_speeds[2] = rotor_speeds_[0] - ((rotor_speeds_[1] - rotor_speeds_[2])) * 0.1
-        rotor_speeds[3] = rotor_speeds_[0] - ((rotor_speeds_[1] + rotor_speeds_[2])) * 0.1
+        rotor_speeds[0] = rotor_speeds_[0] + ((rotor_speeds_[1] + rotor_speeds_[2])) * 0.2
+        rotor_speeds[1] = rotor_speeds_[0] + ((rotor_speeds_[1] - rotor_speeds_[2])) * 0.2
+        rotor_speeds[2] = rotor_speeds_[0] - ((rotor_speeds_[1] - rotor_speeds_[2])) * 0.2
+        rotor_speeds[3] = rotor_speeds_[0] - ((rotor_speeds_[1] + rotor_speeds_[2])) * 0.2
         reward = 0
         pose_all = []
         for _ in range(self.action_repeat):
             done = self.sim.next_timestep(rotor_speeds)  # update the sim pose and velocities
             reward += self.get_reward()
-            pose_all.append(self.sim.pose)
-        if self.sim.time > self.time_treshold:
-            flag = 1.0
-        else:
-            flag = 0.0
+            vector = self.get_vector(self.target_pos, self.sim.pose[:3])  # Vector drone to target
+            scaled_pose = self.sim.pose[3:] * np.array([.1, .1, .1])  # Scaled drone rotation
+            pose = np.concatenate([vector, scaled_pose])  # Concat vector + rotation
+            pose_all.append(pose)
         next_state = np.concatenate(pose_all)
-        next_state = np.append(next_state, [flag])
+        self.state = next_state
         return next_state, reward, done
 
     def reset(self):
         """Reset the sim to start a new episode."""
         self.sim.reset()
-        state = np.concatenate([self.sim.pose] * self.action_repeat)
-        state = np.append(state, [0.0])
-        return state
+        vector = self.get_vector(self.target_pos, self.sim.pose[:3])  # Vector drone to target
+        scaled_pose = self.sim.pose[3:] * np.array([.1, .1, .1])  # Scaled drone rotation
+        pose = np.concatenate([vector, scaled_pose])  # Concat vector + rotation
+        self.state = np.concatenate([pose] * self.action_repeat)  # Add repetitions
+        return self.state
